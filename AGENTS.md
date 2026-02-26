@@ -64,6 +64,7 @@ skill-mobile-mt/
     ├── offline-first.md             ← Local-first + sync patterns (2,566 tokens)
     ├── testing-strategy.md          ← Detox + Maestro + XCUITest + Espresso E2E (2,200 tokens)
     ├── ci-cd.md                     ← GitHub Actions CI templates (2,500 tokens)
+    ├── ai-dlc-workflow.md           ← AI-DLC structured workflow for complex features (2,500 tokens)
     │
     ├── ── TEMPLATES (copy to your project) ────────────────────
     ├── claude-md-template.md        ← CLAUDE.md for Claude Code (copy to project root)
@@ -113,6 +114,7 @@ The agent reads the task, then decides which extra file to load:
 | "Weird issue, not sure why" | `shared/common-pitfalls.md` |
 | "Write / run E2E tests" | `shared/testing-strategy.md` |
 | "Setup CI/CD / GitHub Actions" | `shared/ci-cd.md` |
+| "Big feature / multi-screen" | `shared/ai-dlc-workflow.md` |
 
 **Load cost:** +500 to +3,500 tokens per on-demand file.
 
@@ -285,6 +287,7 @@ Priority 6 (ON-DEMAND): shared/release-checklist.md — Pre-release verification
 Priority 6 (ON-DEMAND): shared/common-pitfalls.md — Known issue patterns
 Priority 6 (ON-DEMAND): shared/testing-strategy.md — Detox + Maestro + XCUITest + Espresso E2E
 Priority 6 (ON-DEMAND): shared/ci-cd.md — GitHub Actions CI/CD templates
+Priority 6 (ON-DEMAND): shared/ai-dlc-workflow.md — AI-DLC structured workflow for complex features
 ```
 
 ---

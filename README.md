@@ -337,6 +337,7 @@ iOS only?
 | `shared/offline-first.md` | 2,566 |
 | `shared/testing-strategy.md` | 2,200 |
 | `shared/ci-cd.md` | 2,500 |
+| `shared/ai-dlc-workflow.md` | 2,500 |
 | `shared/claude-md-template.md` | ~500 |
 | `shared/agent-rules-template.md` | ~2,500 |
 | **Total** | **~55,800** |
@@ -373,6 +374,7 @@ iOS only?
         ├── offline-first.md           Local-first + sync patterns
         ├── testing-strategy.md        Detox + Maestro + XCUITest + Espresso E2E
         ├── ci-cd.md                   GitHub Actions CI/CD templates
+        ├── ai-dlc-workflow.md         AI-DLC structured dev workflow
         ├── claude-md-template.md      CLAUDE.md template for projects
         └── agent-rules-template.md    Rules templates for all agents
 ```
@@ -470,6 +472,14 @@ your-project/
 - **Platform Excellence** (`platform-excellence.md`): iOS 18+ vs Android 15+ native UX standards — navigation patterns, typography, haptic feedback types, permission timing, ratings prompt flow, Live Activities/Dynamic Island, performance targets (cold start < 1s iOS, < 1.5s Android)
 - **Version Management** (`version-management.md`): Full SDK compatibility matrix for RN 0.73-0.76, Expo 50-52, Flutter 3.22-3.27, iOS 16-18, Android 13-15. Check SDK compat BEFORE `npm install`. Release-mode testing protocol.
 - **Observability** (`observability.md`): Sessions as the 4th pillar (Metrics + Logs + Traces + **Sessions**). Session lifecycle, enrichment API, unified instrumentation stack, correlation queries. Every event carries `session_id` for full user journey reconstruction.
+
+### AI-DLC Workflow (AI-Driven Development Lifecycle)
+- Based on AWS AI-DLC methodology — structured development for complex features
+- **Elaboration**: decompose task into Intent + Units before coding
+- **Construction loop**: 4 Hats per Unit (Architecture → Builder → Security → Reviewer)
+- **Backpressure gates**: compiler, lint, security, review must pass before next Unit
+- **Operating modes**: HITL (human approves each Unit), OHOTL, AHOTL
+- Auto-activates for multi-screen features (3+ units); skips for bug fixes
 
 ### Error Recovery
 - 16 common build/runtime errors with concrete fixes

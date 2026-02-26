@@ -70,7 +70,7 @@ const fail = m => log(`  ${c.red}✗${c.reset} ${m}`);
 
 function banner() {
   log(`\n${c.bold}${c.cyan}  ┌──────────────────────────────────────────────────┐`);
-  log(`  │  📱 @buivietphi/skill-mobile-mt v1.4.3           │`);
+  log(`  │  📱 @buivietphi/skill-mobile-mt v1.4.4           │`);
   log(`  │  Master Senior Mobile Engineer                    │`);
   log(`  │                                                  │`);
   log(`  │  Claude · Cline · Roo Code · Cursor · Windsurf  │`);
