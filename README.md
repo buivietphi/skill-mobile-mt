@@ -2,7 +2,7 @@
 
 **Master Senior Mobile Engineer** — AI skill for Claude Code, Cline, Roo Code, Cursor, Windsurf, Copilot, Codex, Gemini CLI, Kimi, Kilo Code, Kiro, and Antigravity.
 
-Pre-built architecture patterns from **30+ production repos (200k+ GitHub stars)** including Ignite, Expensify, Mattermost, Immich, AppFlowy, Now in Android, TCA + auto-adaptation to your current project.
+Pre-built architecture patterns from **30+ production repos (200k+ GitHub stars)** including Ignite, Expensify, Mattermost, Immich, AppFlowy, Now in Android, TCA. Trained from research of **top 53k+ star skill repos** (everything-claude-code, awesome-cursorrules, planning-with-files, Lovable, Cursor, Manus Agent prompts). Auto-adaptation to your current project.
 
 ## Install
 
@@ -305,17 +305,17 @@ iOS only?
 
 | Scenario | Tokens | % of 128K | % of 200K |
 |----------|-------:|----------:|----------:|
-| SKILL.md only | ~13,200 | 10.3% | 6.6% |
-| + 1 platform + core shared/ | ~38,600 | 30.2% | 19.3% |
-| Cross-platform (RN/Flutter + iOS + Android) | ~55,300 | 43.2% | 27.7% |
-| All files loaded | ~77,000 | 60.2% | 38.5% |
-| **Smart load (recommended)** | **~40,900** | **31.9%** | **20.5%** |
+| SKILL.md only | ~15,800 | 12.3% | 7.9% |
+| + 1 platform + core shared/ | ~42,000 | 32.8% | 21.0% |
+| Cross-platform (RN/Flutter + iOS + Android) | ~58,000 | 45.3% | 29.0% |
+| All files loaded | ~79,000 | 61.7% | 39.5% |
+| **Smart load (recommended)** | **~42,000** | **32.8%** | **21.0%** |
 
 ### Per-file token breakdown
 
 | File | Tokens |
 |------|-------:|
-| `SKILL.md` | 6,100 |
+| `SKILL.md` | 8,700 |
 | `AGENTS.md` | 1,600 |
 | `react-native/react-native.md` | 5,108 |
 | `flutter/flutter.md` | 2,100 |
@@ -323,7 +323,7 @@ iOS only?
 | `android/android-native.md` | 4,400 |
 | `shared/code-review.md` | 865 |
 | `shared/bug-detection.md` | 499 |
-| `shared/prompt-engineering.md` | 3,927 |
+| `shared/prompt-engineering.md` | 5,200 |
 | `shared/architecture-intelligence.md` | 4,500 |
 | `shared/common-pitfalls.md` | 1,160 |
 | `shared/error-recovery.md` | 2,435 |
@@ -341,7 +341,7 @@ iOS only?
 | `shared/ui-ux-mobile.md` | 5,500 |
 | `shared/claude-md-template.md` | ~500 |
 | `shared/agent-rules-template.md` | ~2,500 |
-| **Total** | **~55,800** |
+| **Total** | **~59,100** |
 
 ## Installed Structure
 
@@ -440,22 +440,30 @@ your-project/
 - **Platform-specific checks**: iOS ATS + privacy manifest, Android cleartext + ProGuard + exported components
 - **Never skip security**: even for prototypes, internal apps, or "quick fixes"
 
-### Advanced AI Patterns (from Windsurf, Cursor, Devin, Cline)
-- **Status Update Pattern**: Brief progress notes before tool use (no monologues)
-- **Execution Modes**: Discovery → Implementation → Completion (prevents thrashing)
-- **Pre-Action Validation**: Think blocks verify parameters before acting
-- **Error Recovery Protocol**: Max 3 attempts with fallbacks, then ask user
-- **Mobile Context Capture**: Platform, SDK, device, native modules, permissions
+### Advanced AI Patterns (from top 53k+ star repos + Lovable, Cursor, Manus prompts)
+- **7 Cardinal Rules**: Inviolable rules at the top of SKILL.md (read before write, verify before done, clone before create, cite source, 4 states always, platform parity, ask after 3 fails)
+- **Self-Critique Loop**: Generate → Review own code → Refine → Verify (catch bugs before "done")
+- **Context Staleness Rule**: Re-read files after 5+ messages (from Cursor's pattern)
+- **Parallel Execution**: Default to parallel tool calls unless sequential dependency
+- **Leverage Pyramid**: Research → Planning → Implementation (review plans, not just code)
+- **Session State Tracking**: Structured progress tracking for long multi-file tasks
+- **Verification-First**: Include test criteria BEFORE implementation (Anthropic's #1 recommendation)
+- **Assumption-Driven Progress**: State assumptions → proceed → let user correct (don't ask for every decision)
+- **Negative Space Pattern**: Explicit NEVER rules prevent drift better than positive instructions
+- **Brevity Default**: 1-line status updates, detail only when asked (from Lovable, Claude Code)
+- **Error Recovery Protocol**: Max 3 attempts with escalation, then ask user
 - **Build & Deploy Gates**: Platform-specific pre-completion checklists
 - **Mobile Anti-Patterns**: Common mistakes from AI tools (and how to avoid them)
 
 ### Intelligent Prompt Engineering
+- Trained from 7 major AI tools' system prompts (Lovable, Cursor, Manus, Windsurf, Kiro, Replit, Claude Code)
 - XML tag structure for clarity (`<task>`, `<context>`, `<instructions>`, `<constraints>`)
 - Enhanced auto-think templates with pre-action validation
 - Progressive context loading (5 levels: overview → pattern → files → docs → expert)
 - Just-in-time file reading (grep first, read only needed)
 - Reference pattern system (clone existing instead of reading docs)
 - Multi-AI format support (Claude, Gemini, Kimi, Cursor, Copilot, Windsurf)
+- Advanced patterns: verification-first, investigate-before-answer, batched operations, negative space
 
 ### Document Analysis
 - Parse images (mockups, wireframes), PDFs (requirements), DOCX, XML, JSON

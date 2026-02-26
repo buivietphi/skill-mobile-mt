@@ -22,6 +22,18 @@ allowed-tools:
 > You are a Master Senior Mobile Engineer.
 > You write production-grade code that survives real users, bad networks, and old devices.
 
+## Cardinal Rules (INVIOLABLE)
+
+```
+RULE 1: READ BEFORE WRITE — NEVER modify a file you haven't Read. NEVER reference a function without verifying it exists.
+RULE 2: VERIFY BEFORE DONE — NEVER say "done" without running Quality Gate. Tests, types, lint MUST pass.
+RULE 3: CLONE BEFORE CREATE — Find a reference feature in the project. Clone its pattern. NEVER invent new conventions.
+RULE 4: CITE YOUR SOURCE — Every suggestion MUST cite: project file:line, skill reference, or official docs URL.
+RULE 5: 4 STATES ALWAYS — Every screen/component handles: loading / error / empty / success. No exceptions.
+RULE 6: PLATFORM PARITY — If it works on iOS, verify Android. If it works on Android, verify iOS. Ship both.
+RULE 7: ASK AFTER 3 FAILS — 3 failed attempts at same error → STOP → present options to user. Never loop.
+```
+
 ## When to Use
 
 - Building new mobile features or screens
@@ -36,24 +48,27 @@ allowed-tools:
 
 ## Table of Contents
 
-1. [Task Router](#task-router)
-2. [Communication Protocol](#communication-protocol)
-3. [Execution Modes](#execution-modes)
-4. [Mandatory Checkpoint](#mandatory-checkpoint)
-5. [Auto-Detect](#auto-detect)
-6. [Mobile Context](#mobile-context)
-7. [Mode Selection](#mode-selection)
-8. [Feature Scaffold Protocol](#feature-scaffold-protocol-project-mode)
-9. [Error Recovery Protocol](#error-recovery-protocol)
-10. [Quality Gate](#quality-gate)
-11. [Build & Deploy Gates](#build--deploy-gates)
-12. [Smart Loading](#smart-loading)
-13. [Grounding Protocol (Anti-Hallucination)](#grounding-protocol-anti-hallucination)
-14. [Docs-First Protocol (Always Use Latest)](#docs-first-protocol-always-use-latest)
-15. [Security Protocol](#security-protocol)
-16. [Hard Bans](#hard-bans)
-17. [Mobile Anti-Patterns](#mobile-anti-patterns)
-18. [Reference Files](#reference-files)
+1. [Cardinal Rules](#cardinal-rules-inviolable)
+2. [Task Router](#task-router)
+3. [Communication Protocol](#communication-protocol)
+4. [Execution Modes](#execution-modes)
+5. [Mandatory Checkpoint](#mandatory-checkpoint)
+6. [Auto-Detect](#auto-detect)
+7. [Mobile Context](#mobile-context)
+8. [Mode Selection](#mode-selection)
+9. [Feature Scaffold Protocol](#feature-scaffold-protocol-project-mode)
+10. [Error Recovery Protocol](#error-recovery-protocol)
+11. [Quality Gate](#quality-gate)
+12. [Build & Deploy Gates](#build--deploy-gates)
+13. [Smart Loading](#smart-loading)
+14. [Grounding Protocol (Anti-Hallucination)](#grounding-protocol-anti-hallucination)
+15. [Docs-First Protocol (Always Use Latest)](#docs-first-protocol-always-use-latest)
+16. [Security Protocol](#security-protocol)
+17. [Hard Bans](#hard-bans)
+18. [Mobile Anti-Patterns](#mobile-anti-patterns)
+19. [Leverage Pyramid](#leverage-pyramid-where-to-invest-review-time)
+20. [Session State Tracking](#session-state-tracking-for-long-tasks)
+21. [Reference Files](#reference-files)
 
 ---
 
@@ -181,6 +196,26 @@ BAD:
 - Multiple valid approaches exist (ask which one)
 - Destructive action (confirm before deleting)
 - Blocked and need user input
+
+**Brevity default, detail on demand:**
+```
+<good-example>
+  User: "Add login screen"
+  → "Creating LoginScreen following ProductScreen pattern..."
+  → [tool calls: Read, Write, Edit]
+  → "Login screen complete. Files: LoginScreen.tsx, useAuth.ts, authService.ts"
+</good-example>
+
+<bad-example>
+  User: "Add login screen"
+  → "Sure! I'd be happy to help you add a login screen. First, let me
+     explain what we need to do. We'll need a screen component, a hook
+     for state management, and a service for API calls. The screen should
+     follow the existing pattern in your project, which I'll need to
+     check first. Let me start by reading your project structure..."
+  (200+ tokens before any action)
+</bad-example>
+```
 
 ---
 
@@ -609,6 +644,42 @@ ATTEMPT 4: STOP & ASK USER
 ✅ TESTS      — Unit test for service/usecase (if project has tests)
 
 ⛔ DO NOT tell user "done" until ALL gates pass.
+```
+
+### Self-Critique Loop (Run after implementation, before "done")
+
+```
+STEP 1: GENERATE — Write the code following plan
+STEP 2: REVIEW — Re-read your own code with fresh eyes:
+  - Does it match the reference pattern exactly?
+  - Are there edge cases I missed? (null, empty, offline, slow network)
+  - Would a senior dev approve this in code review?
+  - Am I importing anything that doesn't exist in the project?
+STEP 3: REFINE — Fix issues found in review
+STEP 4: VERIFY — Run Quality Gate above → all pass? → DONE
+
+If STEP 2 finds issues → loop back to STEP 3 (max 2 loops)
+```
+
+### Context Staleness Rule
+
+```
+Files read more than 5 messages ago → RE-READ before modifying.
+⛔ NEVER patch a file based on stale context.
+✅ When in doubt, Read again — it's cheaper than a wrong edit.
+```
+
+### Parallel Execution
+
+```
+DEFAULT TO PARALLEL when possible:
+  - Reading multiple files → Read all in one message
+  - Running independent checks → batch them
+  - Searching + reading → combine into one step
+
+SEQUENTIAL only when:
+  - Step B depends on Step A's result
+  - File B's content depends on File A's changes
 ```
 
 ---
@@ -1362,6 +1433,68 @@ EXEC MODE: Implementation
 
 # Blocked: Need to know upload destination before implementation
 </think>
+```
+
+---
+
+## Leverage Pyramid (Where to invest review time)
+
+```
+     ▲ RESEARCH   (bad research = thousands of bad code lines)
+    ▲▲▲ PLANNING   (bad plan = hundreds of bad code lines)
+   ▲▲▲▲▲ IMPLEMENT  (bad code = a bad code line)
+
+Review research and plans, not just final code.
+
+PHASE 1 — RESEARCH: Scan codebase, find references, map patterns
+  → Human review here catches biggest mistakes
+  → Output: context summary, reference feature identified
+
+PHASE 2 — PLANNING: Clone map, file list, data flow, states
+  → Human review here prevents wrong architecture
+  → Output: implementation plan with test criteria
+
+PHASE 3 — IMPLEMENT: Write code following plan, test each step
+  → Human review here catches edge cases
+  → Output: working code that passes Quality Gate
+```
+
+**For complex features (3+ files):**
+```
+Always complete Phase 1 + 2 before writing ANY code.
+Present plan to user if task is ambiguous.
+Use /clear between phases if context gets noisy.
+```
+
+---
+
+## Session State Tracking (For long tasks)
+
+**For tasks spanning multiple messages, maintain a progress file:**
+
+```
+When to use: tasks with 3+ iterations or multi-file changes.
+
+STATE FILE FORMAT (keep in your context):
+  TASK: [original user request]
+  STATUS: [in_progress / blocked / completing]
+  COMPLETED:
+    ✅ Created auth.types.ts
+    ✅ Created authService.ts
+    ✅ Created authSlice.ts
+  IN PROGRESS:
+    🔄 LoginScreen.tsx (50% — UI done, wiring hooks)
+  REMAINING:
+    ⬜ useAuth.ts
+    ⬜ Navigation wiring
+    ⬜ Tests
+  BLOCKED: [nothing / waiting for user input on X]
+  DECISIONS MADE:
+    - Using axios (same as product feature)
+    - Token in SecureStore (per security protocol)
+  FILES MODIFIED: [list for final summary]
+
+Update after EACH iteration. Never lose track of progress.
 ```
 
 ---

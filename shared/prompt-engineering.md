@@ -1,6 +1,6 @@
 # Prompt Engineering — Intelligent Prompt Generation
 
-> Learned from Anthropic, Cline, Roo Code, and Claude Code.
+> Learned from Anthropic, Cursor, Lovable, Manus, Windsurf, Kiro, Claude Code, and top 50k+ star repos.
 > How to generate prompts that AI agents execute correctly.
 
 ---
@@ -648,6 +648,101 @@ Faster than reading documentation.
    Read package.json → verify package exists → then suggest usage
    Grep "fetchUser" src/ → find actual function → then reference it
    Read API service file → check actual response shape → then use it
+```
+
+---
+
+## Advanced Patterns (from top AI tools)
+
+### Verification-First Pattern (Anthropic #1 recommendation)
+
+```
+ALWAYS provide verification criteria BEFORE implementation:
+
+<good-example>
+  "Add pagination to ProductList. Verify: loads 20 items, next page
+   on scroll to bottom, shows loading spinner during fetch, handles
+   empty last page. Run: jest --testPathPattern=ProductList"
+</good-example>
+
+<bad-example>
+  "Add pagination to ProductList"
+  (no way to verify success)
+</bad-example>
+
+The single highest-leverage thing: include tests or expected outputs
+so the agent can check itself.
+```
+
+### Investigate-Before-Answer Pattern (used by Cursor, Lovable)
+
+```
+NEVER speculate about code you have not opened:
+
+STEP 1: User mentions file → Read it
+STEP 2: Understand the actual code → then answer
+STEP 3: If referencing a function → Grep to verify it exists
+
+⛔ "The error is probably because..." (guessing)
+✅ Read file → find line → "Line 42 accesses product.images[0]
+   without null check. The API sometimes returns empty array."
+```
+
+### Assumption-Driven Progress (from Cursor — for non-blocking work)
+
+```
+When NOT blocked but details are unclear:
+
+✅ State assumption clearly → proceed → let user correct
+  "Assuming REST API (matching product feature pattern). Creating
+   authService with axios. If this should use Firebase, let me know."
+
+⛔ Ask permission for every small decision
+  "Should I use axios or fetch? Should the file be named authService
+   or AuthService? Should I put it in services/ or api/?"
+```
+
+### Negative Space Pattern (used by ALL top tools)
+
+```
+Explicitly state what NOT to do — prevents drift:
+
+⛔ NEVER add new packages without checking existing deps first
+⛔ NEVER create utils/ or helpers/ for one-time operations
+⛔ NEVER add error handling for scenarios that can't happen
+⛔ NEVER refactor surrounding code when fixing a bug
+⛔ NEVER add comments to code that is self-explanatory
+```
+
+### Batched Operations (from Lovable — reduces tool call waste)
+
+```
+COMBINE operations that can run together:
+
+<good-example>
+  Read 3 files in ONE message (parallel):
+    Read src/features/product/ProductScreen.tsx
+    Read src/features/product/productService.ts
+    Read src/features/product/product.types.ts
+</good-example>
+
+<bad-example>
+  Read file 1 → wait → Read file 2 → wait → Read file 3
+  (3 round-trips instead of 1)
+</bad-example>
+```
+
+### Error Recovery with Escalation (from Cursor, Claude Code)
+
+```
+ATTEMPT 1: Auto-fix (missing imports, type errors, lint)
+ATTEMPT 2: Read related files, check dependencies
+ATTEMPT 3: Try alternative approach
+ATTEMPT 4: STOP → present options to user
+
+⛔ NEVER: loop on same error 5+ times
+⛔ NEVER: suppress errors to make tests pass
+✅ If corrected twice on same issue → /clear and restart with better prompt
 ```
 
 ---

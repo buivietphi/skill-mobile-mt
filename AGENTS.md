@@ -47,7 +47,7 @@ skill-mobile-mt/
     ├── ── CORE (always load) ──────────────────────────────────
     ├── code-review.md               ← Senior review checklist (865 tokens)
     ├── bug-detection.md             ← Auto bug scanner (499 tokens)
-    ├── prompt-engineering.md        ← Auto-think + XML templates (3,927 tokens)
+    ├── prompt-engineering.md        ← Auto-think + XML templates + advanced patterns (5,200 tokens)
     │
     ├── ── ON-DEMAND (load by task) ────────────────────────────
     ├── error-recovery.md            ← 16 build/runtime error fixes (2,435 tokens)
@@ -73,8 +73,8 @@ skill-mobile-mt/
 ```
 
 **Token totals:**
-- Smart load (1 platform + core shared): **~40,900 tokens** (31.9% of 128K)
-- Full load (all files): **~77,000 tokens** (60.2% of 128K)
+- Smart load (1 platform + core shared): **~42,000 tokens** (32.8% of 128K)
+- Full load (all files): **~79,000 tokens** (61.7% of 128K)
 
 ---
 
@@ -86,13 +86,13 @@ skill-mobile-mt/
 
 **Loads automatically:**
 ```
-SKILL.md                           (~13,200 tokens)
+SKILL.md                           (~15,800 tokens)
 + 1 platform file                  (~1,580–5,730 tokens depending on platform)
 + shared/code-review.md            (~1,500 tokens)
 + shared/bug-detection.md          (~800 tokens)
-+ shared/prompt-engineering.md     (~5,600 tokens)
++ shared/prompt-engineering.md     (~5,200 tokens)
 ─────────────────────────────────────────────────
-≈ 38,600 tokens total (estimated)
+≈ 42,000 tokens total (estimated)
 ```
 
 **Use case:** Regular coding, new features, code review. Covers 90% of daily work.
@@ -472,7 +472,7 @@ npx @buivietphi/skill-mobile-mt --init all        # → all files
   "version": "2.0.0",
   "author": "buivietphi",
   "category": "engineering",
-  "description": "Master Senior Mobile Engineer. Pre-built patterns from 30+ production repos + project adaptation. Auto-detects language and framework. React Native, Flutter, iOS, Android.",
+  "description": "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars) + research from top 53k+ star skill repos. Cardinal rules, self-critique loops, leverage pyramid, verification-first. React Native, Flutter, iOS, Android.",
   "risk": "low",
   "source": "buivietphi (MIT)",
   "platforms": ["react-native", "flutter", "ios", "android"],
