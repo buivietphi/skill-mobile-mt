@@ -469,7 +469,7 @@ npx @buivietphi/skill-mobile-mt --init all        # → all files
 {
   "id": "skill-mobile-mt",
   "name": "skill-mobile-mt",
-  "version": "1.4.3",
+  "version": "2.0.0",
   "author": "buivietphi",
   "category": "engineering",
   "description": "Master Senior Mobile Engineer. Pre-built patterns from 30+ production repos + project adaptation. Auto-detects language and framework. React Native, Flutter, iOS, Android.",
