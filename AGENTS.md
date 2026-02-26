@@ -65,7 +65,7 @@ skill-mobile-mt/
     ├── testing-strategy.md          ← Detox + Maestro + XCUITest + Espresso E2E (2,200 tokens)
     ├── ci-cd.md                     ← GitHub Actions CI templates (2,500 tokens)
     ├── ai-dlc-workflow.md           ← AI-DLC structured workflow for complex features (2,500 tokens)
-    ├── ui-ux-mobile.md              ← Screen templates, design tokens, components, dark mode (3,500 tokens)
+    ├── ui-ux-mobile.md              ← Design system, screen templates, touch, navigation, a11y (5,500 tokens)
     │
     ├── ── TEMPLATES (copy to your project) ────────────────────
     ├── claude-md-template.md        ← CLAUDE.md for Claude Code (copy to project root)

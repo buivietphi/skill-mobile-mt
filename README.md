@@ -338,7 +338,7 @@ iOS only?
 | `shared/testing-strategy.md` | 2,200 |
 | `shared/ci-cd.md` | 2,500 |
 | `shared/ai-dlc-workflow.md` | 2,500 |
-| `shared/ui-ux-mobile.md` | 3,500 |
+| `shared/ui-ux-mobile.md` | 5,500 |
 | `shared/claude-md-template.md` | ~500 |
 | `shared/agent-rules-template.md` | ~2,500 |
 | **Total** | **~55,800** |
@@ -376,7 +376,7 @@ iOS only?
         ├── testing-strategy.md        Detox + Maestro + XCUITest + Espresso E2E
         ├── ci-cd.md                   GitHub Actions CI/CD templates
         ├── ai-dlc-workflow.md         AI-DLC structured dev workflow
-        ├── ui-ux-mobile.md            Screen templates + design tokens + components
+        ├── ui-ux-mobile.md            Design system + screen templates + touch + navigation
         ├── claude-md-template.md      CLAUDE.md template for projects
         └── agent-rules-template.md    Rules templates for all agents
 ```
