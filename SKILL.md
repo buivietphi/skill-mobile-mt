@@ -1,7 +1,7 @@
 ---
 name: skill-mobile-mt
 description: "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars: Ignite, Expensify, Mattermost, Immich, AppFlowy, Now in Android, TCA). Use when: building mobile features, fixing mobile bugs, reviewing mobile code, mobile architecture, React Native, Flutter, iOS Swift, Android Kotlin, mobile performance, mobile security audit, mobile code review, app release. Two modes: (1) default = pre-built production patterns, (2) 'project' = reads current project and adapts."
-version: "1.4.4"
+version: "1.4.5"
 author: buivietphi
 priority: high
 user-invocable: true
@@ -135,6 +135,12 @@ USER REQUEST                    → ACTION (Read tool required)
 
 "Setup CI/CD / GitHub Actions"  → Read: shared/ci-cd.md
                                   then: test → build → distribute pipeline
+
+"Create/design screen UI"       → Read: shared/ui-ux-mobile.md
+                                  then: pick template → apply tokens → build 4 states → dark mode
+
+"Demo screen / mockup"          → Read: shared/ui-ux-mobile.md
+                                  then: ASCII layout → code with tokens → loading skeleton → empty state
 
 "Big feature / multi-screen"    → Read: shared/ai-dlc-workflow.md
                                   then: Elaborate → Construct (4 Hats) → Backpressure → Complete

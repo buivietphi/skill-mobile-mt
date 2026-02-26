@@ -65,6 +65,7 @@ skill-mobile-mt/
     ├── testing-strategy.md          ← Detox + Maestro + XCUITest + Espresso E2E (2,200 tokens)
     ├── ci-cd.md                     ← GitHub Actions CI templates (2,500 tokens)
     ├── ai-dlc-workflow.md           ← AI-DLC structured workflow for complex features (2,500 tokens)
+    ├── ui-ux-mobile.md              ← Screen templates, design tokens, components, dark mode (3,500 tokens)
     │
     ├── ── TEMPLATES (copy to your project) ────────────────────
     ├── claude-md-template.md        ← CLAUDE.md for Claude Code (copy to project root)
@@ -115,6 +116,7 @@ The agent reads the task, then decides which extra file to load:
 | "Write / run E2E tests" | `shared/testing-strategy.md` |
 | "Setup CI/CD / GitHub Actions" | `shared/ci-cd.md` |
 | "Big feature / multi-screen" | `shared/ai-dlc-workflow.md` |
+| "Create/design screen / demo UI" | `shared/ui-ux-mobile.md` |
 
 **Load cost:** +500 to +3,500 tokens per on-demand file.
 
@@ -288,6 +290,7 @@ Priority 6 (ON-DEMAND): shared/common-pitfalls.md — Known issue patterns
 Priority 6 (ON-DEMAND): shared/testing-strategy.md — Detox + Maestro + XCUITest + Espresso E2E
 Priority 6 (ON-DEMAND): shared/ci-cd.md — GitHub Actions CI/CD templates
 Priority 6 (ON-DEMAND): shared/ai-dlc-workflow.md — AI-DLC structured workflow for complex features
+Priority 6 (ON-DEMAND): shared/ui-ux-mobile.md — Screen templates, design tokens, components, dark mode
 ```
 
 ---
