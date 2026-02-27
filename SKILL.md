@@ -1,7 +1,7 @@
 ---
 name: skill-mobile-mt
 description: "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars: Ignite, Expensify, Mattermost, Immich, AppFlowy, Now in Android, TCA). Use when: building mobile features, fixing mobile bugs, reviewing mobile code, mobile architecture, React Native, Flutter, iOS Swift, Android Kotlin, mobile performance, mobile security audit, mobile code review, app release. Two modes: (1) default = pre-built production patterns, (2) 'project' = reads current project and adapts."
-version: "2.1.1"
+version: "2.2.0"
 author: buivietphi
 priority: high
 user-invocable: true
