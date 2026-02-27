@@ -5,9 +5,32 @@
 
 ---
 
+## Platform Focus Rule
+
+```
+⛔ ONLY use error patterns for the DETECTED platform. Don't scan all categories.
+
+REACT NATIVE → Category A (RN crashes) + B + C + D + E + F1
+FLUTTER      → Category A2 (Flutter crashes) + B4 + C + D + F3
+iOS NATIVE   → Category A3 (iOS crashes) + C + D + F1
+ANDROID      → Category A4 (Android crashes) + B3 + C + D + F2
+
+Cross-platform categories (B build, C network, D state, E navigation):
+  → Use the platform-specific SEARCH strategy within each category
+  → e.g., C1 Network error: RN → check axios/fetch, Flutter → check http/dio,
+    iOS → check URLSession, Android → check Retrofit/OkHttp
+
+CROSS-REFERENCE native ONLY WHEN:
+  → Stack trace exits JS/Dart layer into native (Java/Swift/ObjC)
+  → Error message is from native runtime (not Metro/Dart VM)
+  → User explicitly says the bug is in native code
+```
+
+---
+
 ## Error Pattern Database
 
-### Category A: Runtime Crashes
+### Category A: React Native Runtime Crashes
 
 #### A1. "undefined is not an object (evaluating 'X.Y')"
 ```
@@ -91,6 +114,230 @@ COMMON:
   - Promise chain without .catch()
   - async function in useEffect without error handler
 FIX:    Wrap in try/catch → show user-facing error → log for debugging
+```
+
+---
+
+### Category A2: Flutter Runtime Crashes
+
+#### A2-1. "setState() called after dispose()"
+```
+CAUSE:  Async callback completes after widget unmounted, calls setState
+SEARCH: Find the widget from stack trace → check async callbacks
+COMMON:
+  - Future.then() callback without mounted check
+  - Timer callback after screen popped
+  - Stream listener not cancelled in dispose()
+FIX:    Add `if (!mounted) return;` before EVERY setState after async gap
+VERIFY: Check ALL async callbacks in the widget → add mounted guard
+```
+
+#### A2-2. "RenderFlex overflowed by X pixels"
+```
+CAUSE:  Child widget exceeds parent constraint
+SEARCH: Find the widget from error → check its parent Row/Column layout
+COMMON:
+  - Text too long in Row without Flexible/Expanded
+  - Image with fixed size in constrained container
+  - Column inside Column without Expanded
+FIX:    Wrap with Flexible/Expanded OR add overflow: TextOverflow.ellipsis
+        OR wrap with SingleChildScrollView
+```
+
+#### A2-3. "A build function returned null"
+```
+CAUSE:  Switch/if in build() doesn't cover all cases → returns null
+SEARCH: Find the widget's build method → check conditional branches
+COMMON:
+  - Enum switch without default case
+  - if/else if without final else
+  - Late variable not initialized before build
+FIX:    Ensure ALL branches return a Widget, add default/else case
+```
+
+#### A2-4. "Looking up a deactivated widget's ancestor is unsafe"
+```
+CAUSE:  Using BuildContext after async gap (context may be deactivated)
+SEARCH: Find the async function → check context usage after await
+COMMON:
+  - Navigator.of(context).pop() after await
+  - ScaffoldMessenger.of(context) after async call
+  - showDialog after await
+FIX:    Store navigator/messenger BEFORE await, OR check mounted after await
+VERIFY: Check ALL context usage after await in the widget
+```
+
+#### A2-5. "type 'Null' is not a subtype of type 'X'"
+```
+CAUSE:  Null value assigned to non-nullable variable (sound null safety violation)
+SEARCH: Find the variable from stack trace → trace where null comes from
+COMMON:
+  - JSON parsing: map['key'] as String (but key is absent → null)
+  - API response missing expected field
+  - Type cast: (object as String) when object is null
+FIX:    Use null-safe parsing: map['key'] as String? ?? 'default'
+        OR fix fromJson factory to handle missing fields
+```
+
+#### A2-6. "Unhandled Exception: Bad state: Stream has already been listened to"
+```
+CAUSE:  Single-subscription Stream listened to more than once
+SEARCH: Find the StreamController → check how many widgets listen to it
+COMMON:
+  - StreamController (default = single-subscription) used by multiple widgets
+  - Hot reload re-subscribes without cancelling previous
+FIX:    Use StreamController.broadcast() for multiple listeners
+        OR ensure single listener with StreamSubscription tracking
+```
+
+---
+
+### Category A3: iOS Swift Runtime Crashes
+
+#### A3-1. "Fatal error: Unexpectedly found nil while unwrapping an Optional value"
+```
+CAUSE:  Force unwrap (!) on nil value
+SEARCH: Find file:line from crash log → check the ! operator
+COMMON:
+  - IBOutlet not connected in storyboard
+  - UserDefaults.string(forKey:)! for missing key
+  - as! cast that fails
+  - Implicitly unwrapped optional (!) on property not set before access
+FIX:    Replace ! with guard let / if let / ?? default
+VERIFY: Grep "!" in the file → check ALL force unwraps
+```
+
+#### A3-2. "EXC_BAD_ACCESS (code=1/2)" / SIGSEGV
+```
+CAUSE:  Accessing deallocated memory (dangling pointer / use-after-free)
+SEARCH: Enable Zombie Objects in Xcode → reproduce → find deallocated object
+COMMON:
+  - Strong reference to self in closure → VC deallocated but closure keeps pointer
+  - Accessing unowned self after object deallocated
+  - Core Data object accessed from wrong thread
+  - C/ObjC interop with wrong pointer management
+FIX:    Use [weak self] instead of [unowned self] if lifetime uncertain
+        Use perform() for Core Data thread safety
+```
+
+#### A3-3. "Thread 1: signal SIGABRT" / "NSInternalInconsistencyException"
+```
+CAUSE:  Assertion failure in UIKit/Foundation
+SEARCH: Read "reason:" line in crash log → search for that assertion
+COMMON:
+  - UITableView: batch update mismatch (insert/delete count != data count)
+  - Storyboard: IBOutlet or segue identifier not found
+  - Auto Layout: conflicting constraints
+  - Collection view: invalid number of items in section
+FIX:    Fix data source consistency → diffable data source recommended
+        Fix storyboard connections → check identifier spelling
+```
+
+#### A3-4. "Modifications to the layout engine must not be performed from a background thread"
+```
+CAUSE:  UI update called from background thread
+SEARCH: Find the code from stack trace → check which queue it runs on
+COMMON:
+  - URLSession completion handler (runs on background by default)
+  - NotificationCenter observer callback
+  - DispatchQueue.global() { self.label.text = "..." }
+FIX:    Wrap UI updates: DispatchQueue.main.async { ... }
+        OR use @MainActor on the function
+        OR use MainActor.run { ... } in async context
+```
+
+#### A3-5. "Cannot decode" / "DecodingError.keyNotFound"
+```
+CAUSE:  JSON response doesn't match Codable struct
+SEARCH: Find the Codable struct → compare with actual API response
+COMMON:
+  - Backend added new required field → old Codable struct missing it
+  - Backend returns null for field marked as non-optional
+  - Backend changed field type (string → number)
+  - Snake_case vs camelCase mismatch without CodingKeys
+FIX:    Mark uncertain fields as Optional → provide CodingKeys if naming differs
+        Use custom init(from:) with try? for graceful degradation
+```
+
+---
+
+### Category A4: Android Kotlin Runtime Crashes
+
+#### A4-1. "java.lang.NullPointerException" / "KotlinNullPointerException"
+```
+CAUSE:  Null access — !! force unwrap, Java interop, or platform type
+SEARCH: Find file:line from stack trace → check the null source
+COMMON:
+  - intent.extras!!.getString("key") → extras is null from deep link
+  - findViewById<TextView>(R.id.title)!! → wrong layout inflated
+  - Java library returning null where Kotlin expects non-null (platform types)
+  - binding.textView after onDestroyView (binding is null)
+FIX:    Replace !! with ?. ?: default OR requireNotNull with message
+        Use _binding pattern for Fragment view binding
+```
+
+#### A4-2. "java.lang.IllegalStateException: Fragment not attached to an activity"
+```
+CAUSE:  Fragment operation after detach (network callback, delayed handler)
+SEARCH: Find the Fragment from stack trace → check lifecycle state
+COMMON:
+  - requireContext() in coroutine that outlives Fragment
+  - requireActivity() in async callback
+  - getString(R.string.x) after detach
+FIX:    Use context (nullable) instead of requireContext()
+        Check isAdded before Fragment operations
+        Use viewLifecycleOwner.lifecycleScope for coroutines
+```
+
+#### A4-3. "android.os.TransactionTooLargeException"
+```
+CAUSE:  Bundle/Intent data > 500KB (Binder transaction limit ~1MB shared)
+SEARCH: Find what data is passed via Intent/Bundle → check size
+COMMON:
+  - Passing large Parcelable object between Activities
+  - SavedInstanceState accumulating data over config changes
+  - Fragment arguments with large list
+FIX:    Pass ID only → load data in destination from DB/API
+        Use ViewModel for data sharing between Fragments
+        Clear savedInstanceState in onSaveInstanceState if too large
+```
+
+#### A4-4. "java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState"
+```
+CAUSE:  Fragment transaction after onSaveInstanceState (state loss)
+SEARCH: Find the Fragment transaction → check when it's called
+COMMON:
+  - commitNow() in async callback that fires after onPause
+  - show()/hide() dialog after Activity paused
+  - Navigation action after onStop
+FIX:    Use commitAllowingStateLoss() (last resort)
+        Better: check lifecycle state before transaction
+        Best: use Navigation component (handles this automatically)
+```
+
+#### A4-5. "android.view.WindowManager$BadTokenException"
+```
+CAUSE:  Showing dialog/toast with invalid Activity context
+SEARCH: Find the dialog/toast creation → check Activity lifecycle
+COMMON:
+  - Show AlertDialog after Activity finished
+  - Toast with Activity context after destroy
+  - PopupWindow with destroyed Activity reference
+FIX:    Check !isFinishing && !isDestroyed before showing dialog
+        Use applicationContext for Toast (not Activity context)
+```
+
+#### A4-6. "java.util.ConcurrentModificationException"
+```
+CAUSE:  Modifying collection while iterating over it
+SEARCH: Find the collection from stack trace → check for/forEach loops
+COMMON:
+  - for (item in list) { list.remove(item) }
+  - LiveData/Flow emitting new list while observer iterates old
+  - Multiple coroutines modifying same MutableList
+FIX:    Use toList() copy for iteration → modify original
+        Use CopyOnWriteArrayList for concurrent access
+        Use Mutex for coroutine synchronization
 ```
 
 ---

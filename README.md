@@ -306,10 +306,10 @@ iOS only?
 | Scenario | Tokens | % of 128K | % of 200K |
 |----------|-------:|----------:|----------:|
 | SKILL.md only | ~13,400 | 10.5% | 6.7% |
-| + 1 platform + core shared/ | ~45,000 | 35.2% | 22.5% |
-| Cross-platform (RN/Flutter + iOS + Android) | ~62,000 | 48.4% | 31.0% |
-| All files loaded | ~68,500 | 53.5% | 34.3% |
-| **Smart load (recommended)** | **~45,000** | **35.2%** | **22.5%** |
+| + 1 platform + core shared/ | ~34,000 | 26.6% | 17.0% |
+| Cross-platform (RN/Flutter + iOS + Android) | ~70,000 | 54.7% | 35.0% |
+| All files loaded | ~76,300 | 59.6% | 38.2% |
+| **Smart load (recommended)** | **~34,000** | **26.6%** | **17.0%** |
 
 ### Per-file token breakdown
 
@@ -321,9 +321,9 @@ iOS only?
 | `flutter/flutter.md` | ~1,200 |
 | `ios/ios-native.md` | ~860 |
 | `android/android-native.md` | ~2,000 |
-| `shared/code-review.md` | ~800 |
-| `shared/bug-detection.md` | ~3,800 |
-| `shared/debugging-intelligence.md` | ~4,100 |
+| `shared/code-review.md` | ~6,600 |
+| `shared/bug-detection.md` | ~3,900 |
+| `shared/debugging-intelligence.md` | ~5,900 |
 | `shared/prompt-engineering.md` | ~4,700 |
 | `shared/architecture-intelligence.md` | ~2,500 |
 | `shared/common-pitfalls.md` | ~950 |
@@ -344,7 +344,7 @@ iOS only?
 | `shared/i18n-localization.md` | ~1,570 |
 | `shared/claude-md-template.md` | ~760 |
 | `shared/agent-rules-template.md` | ~2,140 |
-| **Total** | **~68,500** |
+| **Total** | **~76,300** |
 
 ## Installed Structure
 
@@ -415,16 +415,26 @@ your-project/
 - Single responsibility per file (max 300 lines)
 - Dependency injection, no hardcoded singletons
 
-### Code Review Protocol
-- Architecture, correctness, performance, security, platform checklists
-- Severity levels: Critical / High / Medium / Low
-- Auto-fail patterns (console.log in production, hardcoded secrets, empty catch blocks)
+### Code Review Protocol (12-category, PR-level)
+- **PR-Level Review**: size check, single responsibility, test accompaniment, commit hygiene — BEFORE code review
+- **12 categories**: architecture, correctness, boundary conditions, test quality, readability, performance, security (expanded), accessibility (WCAG 2.1), breaking changes, platform, documentation, i18n
+- **Severity levels**: Critical / High / Medium / Low with structured output format
+- **Auto-fail patterns**: 10 code + 4 PR-level + 7 AI-specific grounding checks
+- **Review output**: PR-level summary → findings by severity → verdict (APPROVE / CHANGES REQUESTED)
+- **Boundary conditions**: null, empty, off-by-one, numeric limits, unicode, timezone — dedicated dimension
+- **Accessibility**: touch targets (44pt/48dp), contrast ratios, screen reader, font scaling, focus management
+- **Breaking change detection**: public API, deep links, DB schema, push payload, analytics events
+- **Security depth**: certificate pinning, JWT lifecycle, bridge security, biometric auth, dependency audit
+- **Grounded review (anti-false-positive)**: verify every finding before flagging — check actual installed APIs, don't flag from memory, confidence levels (high/medium/low)
+- **Practical usage review**: 25 production crash patterns — 5 cross-platform + 5 React Native + 5 Flutter + 5 iOS Swift + 5 Android Kotlin
+- **Library-specific traps**: React Native, Flutter, iOS Swift, Android Kotlin — real gotchas per platform
+- **Cross-platform examples**: before/after code for all 4 platforms (not just RN)
 
 ### Bug Detection Scanner
 - 4 debug modes: Error Analysis, Fix Bug, Investigate, Diagnostic Scan
 - Git-aware debugging: checks recent commits before deep-diving (auto-skips if no git)
 - 4-phase fix protocol: Root Cause → Pattern Analysis → Single Hypothesis → Defense in Depth
-- 30+ error pattern database with exact search strategies per platform
+- 45+ error pattern database with exact search strategies — RN (7) + Flutter (6) + iOS Swift (5) + Android Kotlin (6) + Network (4) + State (3) + Navigation (2) + Build (4) + Platform (3)
 - Anti-rationalization table: catches self-deception during debugging
 
 ### Decision Matrix Protocol

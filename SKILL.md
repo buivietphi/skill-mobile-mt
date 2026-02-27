@@ -1,7 +1,7 @@
 ---
 name: skill-mobile-mt
 description: "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars: Ignite, Expensify, Mattermost, Immich, AppFlowy, Now in Android, TCA). Use when: building mobile features, fixing mobile bugs, reviewing mobile code, mobile architecture, React Native, Flutter, iOS Swift, Android Kotlin, mobile performance, mobile security audit, mobile code review, app release. Two modes: (1) default = pre-built production patterns, (2) 'project' = reads current project and adapts."
-version: "2.0.0"
+version: "2.1.1"
 author: buivietphi
 priority: high
 user-invocable: true
@@ -146,9 +146,40 @@ USER REQUEST                    → ACTION (Read tool required)
                                     ⛔ NEVER say "I don't see any issues" without having searched
                                     ⛔ NEVER suggest fixes before completing the scan report
 
-"Review X / PR review"          → Read: shared/code-review.md
-                                  Read: shared/common-pitfalls.md
-                                  then: apply both checklists
+"Review" (generic, no scope)    → Read: shared/code-review.md → detect Review Mode:
+                                  → Check git status → if changes exist → MODE: CHANGES
+                                  → If no changes → ASK user: "Review full code hay file cụ thể?"
+
+"Review full / review toàn bộ"  → Read: shared/code-review.md → MODE: FULL
+                                  Read ALL src/ files → 12-category checklist → full report
+
+"Review changes / review thay đổi /
+ review code đã sửa"            → Read: shared/code-review.md → MODE: CHANGES
+                                  git diff → review only changed lines + context
+
+"Review file X / review file này" → Read: shared/code-review.md → MODE: FILE
+                                    Read specified file → 12-category checklist on that file
+
+"Review function X / review hàm" → Read: shared/code-review.md → MODE: FUNCTION
+                                   Find function → trace callers → deep review
+
+"Review PR / review pull request" → Read: shared/code-review.md → MODE: PR
+                                    Read: shared/anti-patterns.md
+                                    Step 0 PR-Level → git diff base..HEAD → 12-category → verdict
+
+"Review modified files /
+ review file đã sửa"             → Read: shared/code-review.md → MODE: MODIFIED
+                                   git status → read modified files → review
+
+"Review commit / review commits"  → Read: shared/code-review.md → MODE: COMMITS
+                                   git log → git show each commit → review diffs
+
+"Check PR / check review PR"     → Read: shared/code-review.md → MODE: PR-CHECK
+                                   Step 0 ONLY (size, scope, tests, commits) → quick ✅/🔴
+
+"Review accessibility / a11y"   → Read: shared/code-review.md (§ Accessibility)
+                                  then: WCAG 2.1 mobile checklist — labels, touch targets,
+                                  contrast, screen reader, font scaling, color, focus, motion
 
 "Optimize / performance X"      → Read: shared/bug-detection.md (§ Performance section)
                                   then: profile → identify bottleneck → fix

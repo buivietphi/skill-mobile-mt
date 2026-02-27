@@ -5,6 +5,35 @@
 
 ---
 
+## Platform Focus Rule
+
+```
+⛔ FOCUS on the DETECTED platform. Only cross-platform when the bug actually touches native code.
+
+REACT NATIVE / EXPO:
+  → Search: src/ (JS/TS) FIRST → only check android/ ios/ if native module involved
+  → Scan: RN-specific patterns (useEffect, FlatList, bridge, Metro)
+  → Go native ONLY IF: error from Logcat/Xcode (not Metro), native module crash, linking issue
+
+FLUTTER:
+  → Search: lib/ (Dart) FIRST → only check android/ ios/ if platform channel involved
+  → Scan: Flutter-specific patterns (mounted, dispose, BuildContext, Widget tree)
+  → Go native ONLY IF: error from native layer, MethodChannel crash, plugin issue
+
+ANDROID NATIVE (Java/Kotlin):
+  → Search: app/src/ FIRST → SKIP RN and Flutter patterns entirely
+  → Scan: Android-specific (lifecycle, ViewModel, coroutines, Fragment, Compose)
+
+iOS NATIVE (Swift/ObjC):
+  → Search: *.swift FIRST → SKIP RN and Flutter patterns entirely
+  → Scan: iOS-specific (optionals, @MainActor, Combine, Task, Codable)
+
+FOR BUGS: if the bug trace crosses platform boundaries (e.g., RN JS error caused by
+native module) → THEN investigate the native side too. Otherwise stay in platform.
+```
+
+---
+
 ## ⛔ STEP 0: Classify Error Type FIRST
 
 ```
