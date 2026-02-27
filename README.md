@@ -305,43 +305,46 @@ iOS only?
 
 | Scenario | Tokens | % of 128K | % of 200K |
 |----------|-------:|----------:|----------:|
-| SKILL.md only | ~15,800 | 12.3% | 7.9% |
-| + 1 platform + core shared/ | ~42,000 | 32.8% | 21.0% |
-| Cross-platform (RN/Flutter + iOS + Android) | ~58,000 | 45.3% | 29.0% |
-| All files loaded | ~79,000 | 61.7% | 39.5% |
-| **Smart load (recommended)** | **~42,000** | **32.8%** | **21.0%** |
+| SKILL.md only | ~13,400 | 10.5% | 6.7% |
+| + 1 platform + core shared/ | ~45,000 | 35.2% | 22.5% |
+| Cross-platform (RN/Flutter + iOS + Android) | ~62,000 | 48.4% | 31.0% |
+| All files loaded | ~68,500 | 53.5% | 34.3% |
+| **Smart load (recommended)** | **~45,000** | **35.2%** | **22.5%** |
 
 ### Per-file token breakdown
 
 | File | Tokens |
 |------|-------:|
-| `SKILL.md` | 8,700 |
-| `AGENTS.md` | 1,600 |
-| `react-native/react-native.md` | 5,108 |
-| `flutter/flutter.md` | 2,100 |
-| `ios/ios-native.md` | 1,452 |
-| `android/android-native.md` | 4,400 |
-| `shared/code-review.md` | 865 |
-| `shared/bug-detection.md` | 499 |
-| `shared/prompt-engineering.md` | 5,200 |
-| `shared/architecture-intelligence.md` | 4,500 |
-| `shared/common-pitfalls.md` | 1,160 |
-| `shared/error-recovery.md` | 2,435 |
-| `shared/document-analysis.md` | 1,200 |
-| `shared/release-checklist.md` | 587 |
-| `shared/anti-patterns.md` | 2,800 |
-| `shared/performance-prediction.md` | 1,500 |
-| `shared/platform-excellence.md` | 2,200 |
-| `shared/version-management.md` | 3,500 |
-| `shared/observability.md` | 3,000 |
-| `shared/offline-first.md` | 2,566 |
-| `shared/testing-strategy.md` | 2,200 |
-| `shared/ci-cd.md` | 2,500 |
-| `shared/ai-dlc-workflow.md` | 2,500 |
-| `shared/ui-ux-mobile.md` | 5,500 |
-| `shared/claude-md-template.md` | ~500 |
-| `shared/agent-rules-template.md` | ~2,500 |
-| **Total** | **~59,100** |
+| `SKILL.md` | ~13,400 |
+| `AGENTS.md` | ~3,300 |
+| `react-native/react-native.md` | ~3,200 |
+| `flutter/flutter.md` | ~1,200 |
+| `ios/ios-native.md` | ~860 |
+| `android/android-native.md` | ~2,000 |
+| `shared/code-review.md` | ~800 |
+| `shared/bug-detection.md` | ~3,800 |
+| `shared/debugging-intelligence.md` | ~4,100 |
+| `shared/prompt-engineering.md` | ~4,700 |
+| `shared/architecture-intelligence.md` | ~2,500 |
+| `shared/common-pitfalls.md` | ~950 |
+| `shared/error-recovery.md` | ~1,700 |
+| `shared/document-analysis.md` | ~1,000 |
+| `shared/release-checklist.md` | ~590 |
+| `shared/anti-patterns.md` | ~1,750 |
+| `shared/performance-prediction.md` | ~950 |
+| `shared/platform-excellence.md` | ~1,250 |
+| `shared/version-management.md` | ~2,400 |
+| `shared/observability.md` | ~2,700 |
+| `shared/offline-first.md` | ~1,560 |
+| `shared/testing-strategy.md` | ~1,300 |
+| `shared/ci-cd.md` | ~1,290 |
+| `shared/ai-dlc-workflow.md` | ~1,380 |
+| `shared/ui-ux-mobile.md` | ~3,850 |
+| `shared/storage-patterns.md` | ~1,370 |
+| `shared/i18n-localization.md` | ~1,570 |
+| `shared/claude-md-template.md` | ~760 |
+| `shared/agent-rules-template.md` | ~2,140 |
+| **Total** | **~68,500** |
 
 ## Installed Structure
 
@@ -360,7 +363,8 @@ iOS only?
     │   └── android-native.md          Android Kotlin + Java patterns
     └── shared/
         ├── code-review.md             Senior review checklist
-        ├── bug-detection.md           Auto bug scanner
+        ├── bug-detection.md           Auto bug scanner (4 modes + git-aware)
+        ├── debugging-intelligence.md  30+ error patterns + root cause tracing
         ├── prompt-engineering.md      Auto-think + prompt templates
         ├── architecture-intelligence.md  Patterns from 30+ production repos
         ├── common-pitfalls.md         Problem → Symptoms → Solution
@@ -373,6 +377,8 @@ iOS only?
         ├── observability.md           Sessions as 4th pillar
         ├── release-checklist.md       Pre-release verification
         ├── offline-first.md           Local-first + sync patterns
+        ├── storage-patterns.md        Storage selection matrix (AsyncStorage/MMKV/SQLite/etc.)
+        ├── i18n-localization.md       Internationalization + RTL + locale patterns
         ├── testing-strategy.md        Detox + Maestro + XCUITest + Espresso E2E
         ├── ci-cd.md                   GitHub Actions CI/CD templates
         ├── ai-dlc-workflow.md         AI-DLC structured dev workflow
@@ -415,9 +421,21 @@ your-project/
 - Auto-fail patterns (console.log in production, hardcoded secrets, empty catch blocks)
 
 ### Bug Detection Scanner
-- Crash risks, memory leaks, race conditions
-- Security vulnerabilities, performance issues, UX problems
-- Platform-specific detection rules
+- 4 debug modes: Error Analysis, Fix Bug, Investigate, Diagnostic Scan
+- Git-aware debugging: checks recent commits before deep-diving (auto-skips if no git)
+- 4-phase fix protocol: Root Cause → Pattern Analysis → Single Hypothesis → Defense in Depth
+- 30+ error pattern database with exact search strategies per platform
+- Anti-rationalization table: catches self-deception during debugging
+
+### Decision Matrix Protocol
+- Structured comparison format when multiple valid approaches exist
+- Estimation protocol: classify effort XS/S/M/L/XL with risk assessment
+- Migration/upgrade decision protocol: breaking changes analysis + impact scan
+
+### Codebase Scan Strategy
+- 3 scan levels: Quick (~5 reads), Standard (~15 reads), Deep (~30+ reads)
+- Monorepo strategy: focus target package, scan shared deps
+- Multi-module strategy: JS/TS vs Native vs Cross-layer task detection
 
 ### Grounding Protocol (Anti-Hallucination)
 - **Source hierarchy**: project code > skill files > official docs > production repos > AI knowledge

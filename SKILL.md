@@ -51,24 +51,26 @@ RULE 7: ASK AFTER 3 FAILS — 3 failed attempts at same error → STOP → prese
 1. [Cardinal Rules](#cardinal-rules-inviolable)
 2. [Task Router](#task-router)
 3. [Communication Protocol](#communication-protocol)
-4. [Execution Modes](#execution-modes)
-5. [Mandatory Checkpoint](#mandatory-checkpoint)
-6. [Auto-Detect](#auto-detect)
-7. [Mobile Context](#mobile-context)
-8. [Mode Selection](#mode-selection)
-9. [Feature Scaffold Protocol](#feature-scaffold-protocol-project-mode)
-10. [Error Recovery Protocol](#error-recovery-protocol)
-11. [Quality Gate](#quality-gate)
-12. [Build & Deploy Gates](#build--deploy-gates)
-13. [Smart Loading](#smart-loading)
-14. [Grounding Protocol (Anti-Hallucination)](#grounding-protocol-anti-hallucination)
-15. [Docs-First Protocol (Always Use Latest)](#docs-first-protocol-always-use-latest)
-16. [Security Protocol](#security-protocol)
-17. [Hard Bans](#hard-bans)
-18. [Mobile Anti-Patterns](#mobile-anti-patterns)
-19. [Leverage Pyramid](#leverage-pyramid-where-to-invest-review-time)
-20. [Session State Tracking](#session-state-tracking-for-long-tasks)
-21. [Reference Files](#reference-files)
+4. [Decision Matrix Protocol](#decision-matrix-protocol)
+5. [Execution Modes](#execution-modes)
+6. [Mandatory Checkpoint](#mandatory-checkpoint)
+7. [Auto-Detect](#auto-detect)
+8. [Mobile Context](#mobile-context)
+9. [Mode Selection](#mode-selection)
+10. [Feature Scaffold Protocol](#feature-scaffold-protocol-project-mode)
+11. [Error Recovery Protocol](#error-recovery-protocol)
+12. [Quality Gate](#quality-gate)
+13. [Build & Deploy Gates](#build--deploy-gates)
+14. [Codebase Scan Strategy](#codebase-scan-strategy)
+15. [Smart Loading](#smart-loading)
+16. [Grounding Protocol (Anti-Hallucination)](#grounding-protocol-anti-hallucination)
+17. [Docs-First Protocol (Always Use Latest)](#docs-first-protocol-always-use-latest)
+18. [Security Protocol](#security-protocol)
+19. [Hard Bans](#hard-bans)
+20. [Mobile Anti-Patterns](#mobile-anti-patterns)
+21. [Leverage Pyramid](#leverage-pyramid-where-to-invest-review-time)
+22. [Session State Tracking](#session-state-tracking-for-long-tasks)
+23. [Reference Files](#reference-files)
 
 ---
 
@@ -94,8 +96,55 @@ USER REQUEST                    → ACTION (Read tool required)
                                   then: Read platform file (see Smart Loading below)
                                   then: suggest structure based on project size + stack
 
-"Fix / debug X"                 → Read: shared/bug-detection.md
-                                  then: read code → find root cause → fix → verify
+"Fix / debug X"                 → ⛔ STOP — DO NOT suggest anything yet
+                                  Step 1: CLASSIFY error type (crash/build/type/network/render/state/native)
+                                  Step 2: SEARCH PROJECT FIRST (mandatory before ANY suggestion)
+                                    → Grep error keywords in src/ (class name, function name, error message)
+                                    → Glob for related files (*.ts, *.tsx, *.dart, *.swift, *.kt)
+                                    → Read the TOP 3-5 matched files — understand actual code
+                                  Step 3: Find root cause IN PROJECT CODE (cite file:line)
+                                  Step 4: Fix → verify → cite source
+                                  ⛔ NEVER skip Step 1-2 — even if you "think" you know the answer
+                                  If complex/unfamiliar bug → also Read: shared/debugging-intelligence.md
+
+"Check issue / investigate X"   → ⛔ DO NOT FIX YET — investigate first
+                                  Step 1: Read issue description fully
+                                  Step 2: Extract affected feature + expected vs actual behavior
+                                  Step 3: Search project for affected code area (Grep/Glob src/)
+                                  Step 4: Read code → trace data flow → find root cause
+                                  Step 5: REPORT findings — ask user if they want a fix
+                                  ⛔ NEVER jump straight to fixing without reporting first
+
+"Paste error log / stack trace" → Step 1: FILTER noise (skip node_modules, engine frames)
+                                  Step 2: Extract signal lines (YOUR file paths, Error:, Caused by:)
+                                  Step 3: Parse stack trace by platform (RN/Flutter/iOS/Android)
+                                  Step 4: Search project src/ for extracted keywords
+                                  Step 5: Root cause → fix → cite
+                                  If long/complex trace → also Read: shared/debugging-intelligence.md
+
+"Check giùm / xem thử / sao nó  → ⛔ USER DOESN'T KNOW THE CAUSE — run Diagnostic Scan:
+ lạ / something's off / not sure    Step 1: EXTRACT AREA from what user said or showed:
+ why / take a look / describe         → Screen name? Feature name? Module name? File name?
+ symptoms without error"              → If user paste code → that IS the area
+                                      → If user describe behavior → extract the feature/screen name
+                                    Step 2: SEARCH project for that area (mandatory):
+                                      → Grep "[feature/screen name]" src/
+                                      → Glob "**/*[name]*" to find all related files
+                                      → Read ALL matched files (not just 1 — scan broadly)
+                                    Step 3: RUN SCAN CHECKLIST on the code you just read:
+                                      → Walk through bug-detection.md Step 5 checklist
+                                      → Check: crash risks, memory leaks, race conditions,
+                                        security, performance, UX — against ACTUAL code
+                                    Step 4: REPORT what you found (structured):
+                                      → "I scanned [N files] in [area]."
+                                      → "Found [N] potential issues:" (list with severity + file:line)
+                                      → "No critical issues found." (if clean)
+                                      → "Suspicious: [describe what looks off based on code]"
+                                    Step 5: ASK what user wants to do:
+                                      → "Want me to fix [specific issue]?"
+                                      → "Want me to investigate [suspicious area] deeper?"
+                                    ⛔ NEVER say "I don't see any issues" without having searched
+                                    ⛔ NEVER suggest fixes before completing the scan report
 
 "Review X / PR review"          → Read: shared/code-review.md
                                   Read: shared/common-pitfalls.md
@@ -145,6 +194,17 @@ USER REQUEST                    → ACTION (Read tool required)
 "Offline / cache / sync"        → Read: shared/offline-first.md
                                   then: implement local-first architecture
 
+"Storage / lưu data / AsyncStorage / MMKV / SecureStore / Keychain /
+ SQLite / WatermelonDB / Realm / token storage / local database /
+ save to device / persist data"  → Read: shared/storage-patterns.md
+                                  then: pick storage type from matrix → implement → security check
+
+"i18n / multi-language / translation / localization / đa ngôn ngữ /
+ multilang / RTL / Arabic / locale / language switcher / date format /
+ number format / plural / slang / i18next / l10n" →
+                                  Read: shared/i18n-localization.md
+                                  then: pick library per platform → scaffold translations → RTL check
+
 "Write/run E2E tests"           → Read: shared/testing-strategy.md
                                   then: Detox (RN) or Maestro (cross-platform) or XCUITest/Espresso
 
@@ -159,6 +219,14 @@ USER REQUEST                    → ACTION (Read tool required)
 
 "Big feature / multi-screen"    → Read: shared/ai-dlc-workflow.md
                                   then: Elaborate → Construct (4 Hats) → Backpressure → Complete
+
+"Which is better / compare /     → Decision Matrix Protocol (in this file — no extra read)
+ nên dùng gì / best approach /     Present 2-3 options in matrix format → recommend → wait
+ options / trade-offs /             ⛔ NEVER just pick one without showing comparison
+ upgrade or not / migrate"
+
+"How much work / big change? /   → Estimation Protocol (in Decision Matrix Protocol section)
+ scope / effort / risk"            Scan → classify XS/S/M/L/XL → risk → present
 
 ```
 
@@ -215,6 +283,130 @@ BAD:
      check first. Let me start by reading your project structure..."
   (200+ tokens before any action)
 </bad-example>
+```
+
+---
+
+## Decision Matrix Protocol
+
+**When multiple valid approaches exist, ALWAYS present a structured comparison — NEVER just pick one.**
+
+### When This Triggers
+
+```
+TRIGGERS:
+  - User asks "how should I..." / "what's the best way to..."
+  - Multiple libraries/tools can solve the same problem
+  - Architecture decisions (monolith vs modular, REST vs GraphQL, etc.)
+  - Migration/upgrade questions ("should I upgrade to X?")
+  - Trade-off situations (performance vs simplicity, native vs cross-platform)
+  - User says "give me options" / "what are my choices"
+
+⛔ DO NOT just pick one approach and implement it
+✅ Present comparison → let user decide → then implement
+```
+
+### Decision Matrix Format
+
+```
+STEP 1: RESEARCH (before presenting options)
+  → Read project code to understand constraints
+  → Check existing patterns (what does the project already use?)
+  → WebSearch for latest recommendations + benchmarks
+  → Identify 2-3 viable options (no more — too many = analysis paralysis)
+
+STEP 2: PRESENT MATRIX
+
+  ┌────────────────────────────────────────────────────────────┐
+  │ DECISION: [What we're deciding]                            │
+  │ CONTEXT: [Project constraints — framework, SDK, team size] │
+  ├──────────────┬──────────────┬──────────────┬───────────────┤
+  │              │ Option A     │ Option B     │ Option C      │
+  ├──────────────┼──────────────┼──────────────┼───────────────┤
+  │ What         │ [1 sentence] │ [1 sentence] │ [1 sentence]  │
+  │ Pros         │ • fast       │ • simple     │ • scalable    │
+  │              │ • typed      │ • small      │ • official    │
+  │ Cons         │ • complex    │ • no types   │ • heavy       │
+  │ Performance  │ [fast/med/slow]│ [fast/med/slow]│ [fast/med/slow]│
+  │ Bundle Size  │ [small/med/large]│ [small/med/large]│ [small/med/large]│
+  │ Learning     │ [easy/med/hard]│ [easy/med/hard]│ [easy/med/hard]│
+  │ Maintenance  │ [low/med/high]│ [low/med/high]│ [low/med/high]│
+  │ Community    │ [stars/npm weekly]│ [stars/npm weekly]│ [stars/npm weekly]│
+  │ Fits Project │ ✅/⚠️/❌     │ ✅/⚠️/❌     │ ✅/⚠️/❌     │
+  └──────────────┴──────────────┴──────────────┴───────────────┘
+
+STEP 3: RECOMMENDATION (with reasoning)
+  → "I recommend Option [X] because:
+     1. [reason based on project code — cite file]
+     2. [reason based on constraints]
+     3. [reason based on trade-offs]"
+  → "However, Option [Y] is better if [condition]."
+
+STEP 4: WAIT FOR USER DECISION
+  → ⛔ DO NOT implement until user picks
+  → If user says "just pick one" → implement your recommendation
+```
+
+### Estimation Protocol (for scope/effort questions)
+
+```
+When user asks "how much work is this?" / "is this a big change?" / "should we do X?":
+
+STEP 1: SCAN SCOPE
+  → Glob + Grep to count affected files
+  → Identify: how many files change? how many new files?
+  → Check: any breaking changes to existing features?
+
+STEP 2: CLASSIFY EFFORT
+  ┌──────────────────────────────────────────────────┐
+  │ XS  │ 1-2 files │ Simple change, no side effects │
+  │ S   │ 3-5 files │ Contained change, few deps      │
+  │ M   │ 6-15 files│ Cross-feature, some testing      │
+  │ L   │ 16+ files │ Architectural, needs planning    │
+  │ XL  │ 30+ files │ Major refactor, phased approach   │
+  └──────────────────────────────────────────────────┘
+
+STEP 3: RISK ASSESSMENT
+  → Breaking changes: [none / minor / major]
+  → Test coverage: [good / partial / none — need to add]
+  → Rollback difficulty: [easy / medium / hard]
+  → Dependencies affected: [list them]
+
+STEP 4: PRESENT
+  "This is a [S/M/L] change:
+   → [N] files to modify, [N] new files
+   → Risk: [low/medium/high] — [why]
+   → Suggestion: [do it now / plan first / phase it]"
+```
+
+### Migration/Upgrade Decision Protocol
+
+```
+When user asks "should I upgrade to X?" / "migrate from A to B?":
+
+STEP 1: CHECK CURRENT STATE
+  → Read package.json / pubspec.yaml → exact current versions
+  → Grep for deprecated APIs currently used in src/
+  → Count how many files use the library/API being upgraded
+
+STEP 2: CHECK TARGET STATE
+  → WebSearch "[library] migration guide [current version] to [target version]"
+  → WebSearch "[library] breaking changes [target version]"
+  → List ALL breaking changes that affect THIS project
+
+STEP 3: IMPACT ANALYSIS
+  → For each breaking change → Grep in src/ → count affected files
+  → Classify: auto-fixable (codemod) vs manual fix
+
+STEP 4: PRESENT DECISION
+  "Upgrading [X] from [v1] to [v2]:
+   → Breaking changes: [N] that affect your project
+   → Files to update: [N]
+   → Auto-fixable: [N] (via codemod)
+   → Manual fixes: [N]
+   → Risk: [low/medium/high]
+   → Recommendation: [upgrade now / wait / partial upgrade]
+   → If upgrading: [suggest phased plan]"
 ```
 
 ---
@@ -568,28 +760,47 @@ file upload / camera →
 ```
 ERROR ENCOUNTERED → RECOVERY FLOW:
 
-ATTEMPT 1: Auto-fix obvious issues
-  - Missing imports? → Add them
-  - Type errors? → Fix types
+⛔ BEFORE ANY ATTEMPT: Search project source code first
+  → Grep error keywords in src/ (file name, function name, class name)
+  → Read matched files to understand actual code context
+  → ONLY THEN proceed to fix attempts
+
+ATTEMPT 1: Fix based on project code analysis
+  - You already searched src/ → you know WHERE the issue is
+  - Missing imports? → Check what the file actually imports → add correct one
+  - Type errors? → Read the actual types/interfaces in project → fix to match
   - Linter errors? → Auto-format
   - Run verification → success? DONE : next attempt
 
-ATTEMPT 2: Deeper investigation
-  - Read related files
-  - Check dependencies installed
+ATTEMPT 2: Widen search — read related files
+  - Grep for the function/class across entire project (not just src/)
+  - Read files that CALL or IMPORT the broken code
+  - Check dependencies installed (package.json / pubspec.yaml)
   - Verify native module linked (mobile)
   - Run verification → success? DONE : next attempt
 
-ATTEMPT 3: Alternative approach
-  - Try different solution
-  - Use fallback library
-  - Simplify implementation
+ATTEMPT 3: Alternative approach (still based on project context)
+  - Look at how SIMILAR features are implemented in the project
+  - Clone working pattern → adapt for this case
+  - Simplify implementation if needed
   - Run verification → success? DONE : next attempt
 
-ATTEMPT 4: STOP & ASK USER
-  - Describe what failed
-  - Show 3 attempts made
-  - Present 2-3 options
+⚠️ 3 FAILS = QUESTION ARCHITECTURE (mandatory checkpoint):
+  If 3 attempts failed on the SAME error → STOP fixing and ask:
+  - "Is this the right approach entirely?"
+  - "Is the underlying pattern/architecture wrong?"
+  - "Should I be solving a DIFFERENT problem?"
+  Search project for working alternatives:
+  → Grep for similar feature that WORKS → compare the patterns
+  → The bug may not be a bug — it may be a wrong approach
+
+ATTEMPT 4: STOP & ASK USER (with evidence)
+  - Show what you searched and found in project
+  - Show EACH attempt: what you tried + what happened + why it failed
+  - ⛔ NEVER say "I tried everything" — show EXACTLY what you tried
+  - If 3+ fails: "This suggests the issue may be architectural.
+    I found [working_pattern] in [file] that solves this differently."
+  - Present 2-3 options with trade-offs
   - Wait for user decision
 ```
 
@@ -795,6 +1006,118 @@ FOR UI CHANGES:
 
 ---
 
+## Codebase Scan Strategy
+
+**Protocol for large projects, monorepos, and multi-module codebases. Choose the right scan depth.**
+
+### When This Triggers
+
+```
+TRIGGERS:
+  - Project has > 50 files in src/
+  - Monorepo with multiple apps/packages
+  - Multi-module project (app/ + packages/ + shared/)
+  - User says "new project" / "first time seeing this code"
+  - User says "check the whole codebase" / "audit"
+  - You don't know where to start
+
+⛔ DO NOT Read every file — token waste
+⛔ DO NOT guess structure from folder names alone
+✅ Scan strategically: breadth first, depth on demand
+```
+
+### Scan Levels
+
+```
+LEVEL 1: QUICK SCAN (~5 reads) — for focused tasks
+  ┌─────────────────────────────────────────────────────────┐
+  │ 1. ls src/ (or app/ or lib/) → map top-level folders    │
+  │ 2. Read package.json / pubspec.yaml → deps + scripts    │
+  │ 3. Read 1 config file (tsconfig / eslint / analysis)    │
+  │ 4. Read CLAUDE.md / README.md (if exists)               │
+  │ 5. Glob "**/*[feature_name]*" → find target files       │
+  │                                                         │
+  │ USE WHEN: Task is focused (fix bug, add to existing)    │
+  └─────────────────────────────────────────────────────────┘
+
+LEVEL 2: STANDARD SCAN (~15 reads) — for new features
+  ┌─────────────────────────────────────────────────────────┐
+  │ Everything in Level 1 PLUS:                             │
+  │ 6. ls each top-level src/ subfolder → map full tree     │
+  │ 7. Read 1 screen file (UI pattern)                      │
+  │ 8. Read 1 service/api file (data pattern)               │
+  │ 9. Read 1 hook/viewmodel file (state pattern)           │
+  │ 10. Read 1 store/slice file (state management)          │
+  │ 11. Read navigation/router config                       │
+  │ 12. Read .env.example (if exists) → API endpoints       │
+  │ 13. Grep "TODO\|FIXME\|HACK" src/ → known issues       │
+  │ 14. Read types/models directory → data shapes           │
+  │ 15. Read test file (if exists) → testing patterns       │
+  │                                                         │
+  │ USE WHEN: Building new feature, need full context       │
+  └─────────────────────────────────────────────────────────┘
+
+LEVEL 3: DEEP SCAN (~30+ reads) — for audits & architecture
+  ┌─────────────────────────────────────────────────────────┐
+  │ Everything in Level 2 PLUS:                             │
+  │ 16. Read ALL screen/page files (list them all)          │
+  │ 17. Read ALL service/api files                          │
+  │ 18. Read ALL store/state files                          │
+  │ 19. Map dependency graph: who imports whom              │
+  │ 20. Check circular imports                              │
+  │ 21. Read native config (ios/Info.plist, AndroidManifest)│
+  │ 22. Read CI/CD config (if exists)                       │
+  │ 23. Read ALL test files                                 │
+  │ 24. Grep for security issues (hardcoded keys, tokens)   │
+  │ 25+. Read shared/common components                      │
+  │                                                         │
+  │ USE WHEN: Full audit, architecture review, migration    │
+  └─────────────────────────────────────────────────────────┘
+```
+
+### Monorepo Strategy
+
+```
+MONOREPO DETECTED WHEN:
+  → Root has packages/ or apps/ or modules/ or workspaces in package.json
+  → Multiple package.json files at different levels
+  → lerna.json / nx.json / turbo.json exists
+
+SCAN PROTOCOL FOR MONOREPOS:
+  1. READ ROOT: package.json → workspaces field → list all packages
+  2. MAP PACKAGES: ls packages/ (or apps/) → list each package
+  3. IDENTIFY TARGET: Which package does the user's task affect?
+  4. FOCUS: Scan ONLY the target package at Level 2
+  5. SHARED: Also scan shared packages that target imports
+     → Grep "from ['\"](../../packages|@monorepo)" in target package
+  6. IGNORE: Other packages unless explicitly asked
+
+  ⛔ NEVER scan the entire monorepo — scan the target package
+  ✅ Treat each package as its own project with its own scan
+```
+
+### Multi-Module Strategy (React Native + Native)
+
+```
+MULTI-MODULE DETECTED WHEN:
+  → Project has src/ (JS/TS) + ios/ + android/ folders
+  → Native modules exist (react-native.config.js or manual linking)
+  → Custom native code beyond standard template
+
+SCAN PROTOCOL:
+  1. IDENTIFY LAYER: Is the task JS/TS-only or involves native?
+  2. JS/TS TASK → Scan src/ only (Level 1 or 2)
+  3. NATIVE TASK → Also scan:
+     → ios/[AppName]/ → Swift/ObjC source files
+     → android/app/src/main/java/ → Kotlin/Java source files
+     → Check bridging: ios/[AppName]-Bridging-Header.h
+     → Check native modules: Grep "RCT_EXPORT_MODULE" or "@ReactMethod"
+  4. CROSS-LAYER TASK (JS calls native) → Scan both layers
+     → Find the bridge: NativeModules.X in JS → X module in native
+```
+
+---
+
 ## Smart Loading
 
 **After auto-detect, use the Read tool to open ONLY relevant files.**
@@ -818,6 +1141,9 @@ FOR UI CHANGES:
 | All platforms | `shared/platform-excellence.md` | 🟡 Task Router says so |
 | All platforms | `shared/version-management.md` | 🟡 Task Router says so |
 | All platforms | `shared/observability.md` | 🟡 Task Router says so |
+| All platforms | `shared/storage-patterns.md` | 🟡 Task Router says so |
+| All platforms | `shared/i18n-localization.md` | 🟡 Task Router says so |
+| All platforms | `shared/debugging-intelligence.md` | 🟡 Complex bugs / stack traces / issue investigation |
 
 **Cross-platform:** Flutter/RN projects also Read `ios/ios-native.md` + `android/android-native.md` for native modules.
 
@@ -899,19 +1225,80 @@ RULE 6: NO PHANTOM PACKAGES
 ### When Fixing Bugs
 
 ```
-GROUNDED BUG FIX PROTOCOL:
+GROUNDED BUG FIX PROTOCOL (NON-NEGOTIABLE):
 
-1. READ the file with the bug (don't guess from error message alone)
-2. FIND the exact line causing the issue
-3. UNDERSTAND the data flow (what calls this? what does it return?)
-4. VERIFY the fix works with the actual types/interfaces in the project
-5. CHECK side effects (grep for other files using this function)
-6. CITE: "Fix in [file]:[line] — [root cause] — [why fix works]"
+⛔ BEFORE YOU SAY ANYTHING — SEARCH THE PROJECT FIRST:
 
-⛔ NEVER:
+STEP 0: EXTRACT KEYWORDS + CHECK GIT (mandatory)
+  → Parse error message for: file name, function name, class name, module name, line number
+  → If error says "Cannot find X" → Grep for "X" in src/
+  → If error says "TypeError in Y" → Grep for "Y" in src/
+  → If error says "Module not found: Z" → Grep for "Z" in package.json AND src/
+  → CHECK RECENT CHANGES (if git project):
+    → First: git rev-parse --is-inside-work-tree 2>/dev/null
+    → If NOT git / no commits → skip git check → go to Step 1
+    → If git: git log --oneline -5 + git diff HEAD~3 --name-only
+    → If broken file was recently changed → read that diff FIRST
+    → 80%+ of bugs are caused by recent changes
+
+STEP 1: SEARCH PROJECT SOURCE (mandatory — NEVER skip)
+  → Grep: search error keywords in src/ directory FIRST
+  → Glob: find related files by pattern (*.ts, *.tsx, *.dart, *.swift, *.kt)
+  → Read: open the TOP 3-5 most relevant matched files
+  → If no match in src/ → search in lib/, app/, packages/, modules/
+  → If STILL no match → expand to project root
+
+STEP 2: READ & UNDERSTAND actual code
+  → Read the file(s) found in Step 1
+  → Trace the data flow: what calls this? what does it return?
+  → Check imports, types, interfaces IN THE PROJECT
+  → Check package.json / pubspec.yaml for dependency versions
+
+STEP 3: FIND ROOT CAUSE in project code
+  → Cite exact file:line where the bug originates
+  → Explain WHY it fails based on the actual code you just read
+
+STEP 4: FIND WORKING EXAMPLE (before fixing)
+  → Search SAME project for similar code that WORKS
+  → Compare broken code vs working code → list differences
+  → The fix should make broken code match the working pattern
+  → If no working example → proceed to Step 5
+
+STEP 5: SINGLE HYPOTHESIS FIX
+  → Form ONE hypothesis from root cause
+  → Make the SMALLEST possible change
+  → ⛔ NEVER stack multiple fixes at once
+  → ⛔ NEVER "fix it and also refactor nearby code"
+  → Verify: does this fix ALL symptoms?
+  → If no → REVERT → new hypothesis (don't carry failed fixes forward)
+
+STEP 6: DEFENSE IN DEPTH (after fix verified)
+  → Add validation at every layer data passes through
+  → Make the bug structurally impossible to recur
+  → Grep for side effects (other files using this function)
+
+STEP 7: CITE source with evidence
+  → "Root cause: [file]:[line] — [what's wrong] — [traced from Step 2-3]"
+  → "Working example: [file]:[line] — [how it works correctly]"
+  → "Fix: [change] — [why it works] — [defense added at layers X, Y]"
+
+⛔ HARD VIOLATIONS (auto-fail):
+  - Suggesting a fix WITHOUT first running Grep/Glob on the project
   - "The error is probably because..." (guess without reading code)
   - "Try changing X to Y" (without reading the file first)
   - "This should fix it" (without verifying types match)
+  - Suggesting generic Stack Overflow solutions without checking project context
+  - Jumping to package.json/config fixes before checking src/ code
+  - Stacking 3+ changes at once (1 hypothesis → 1 change → verify)
+  - Claiming "done" without fresh verification evidence
+  - "Should work now" / "I'm confident" without running/reading output
+
+🚩 ANTI-RATIONALIZATION (catch yourself):
+  "Should work now"           → You didn't verify. RUN IT.
+  "I'm confident this fixes"  → Confidence ≠ evidence. PROVE IT.
+  "Probably a race condition" → Buzzword. TRACE the async flow.
+  "Let me also clean up..."   → STOP. Fix the bug only.
+  Same fix 3+ times          → Architecture problem. STOP & rethink.
 ```
 
 ### Anti-Hallucination Checklist (run before EVERY response)
@@ -1527,6 +1914,9 @@ skill-mobile-mt/
     ├── platform-excellence.md        ← 🟡 iOS 18+ vs Android 15+ guidelines
     ├── version-management.md         ← 🟡 SDK compatibility matrix
     ├── observability.md              ← 🟡 Sessions as 4th pillar
+    ├── offline-first.md              ← 🟢 Local-first + sync patterns
+    ├── storage-patterns.md           ← 🟡 MMKV / SecureStore / SQLite / WatermelonDB / Keychain
+    ├── i18n-localization.md          ← 🟡 i18next / slang / .xcstrings / strings.xml / RTL
     │
-    └── offline-first.md              ← 🟢 Local-first + sync patterns
+    └── debugging-intelligence.md     ← 🟡 30+ error patterns + search strategies + issue investigation
 ```

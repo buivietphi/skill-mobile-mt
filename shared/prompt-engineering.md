@@ -64,40 +64,138 @@
 ```xml
 <think>
 BUG: [description]
-FILE: [path]
+ERROR MESSAGE: [paste exact error]
+
+⛔ STOP — CLASSIFY + SEARCH PROJECT FIRST (before ANY analysis):
+
+<error_classification>
+  TYPE: [RUNTIME CRASH / BUILD ERROR / TYPE MISMATCH / NETWORK ERROR /
+         RENDER ERROR / NAVIGATION ERROR / PERFORMANCE / STATE ERROR /
+         NATIVE ERROR / MEMORY ERROR / INVESTIGATION]
+
+  SEARCH STRATEGY based on type:
+  → RUNTIME/STATE/RENDER/NAVIGATION → Search src/ FIRST → then trace outward
+  → BUILD/NATIVE                    → Search config files FIRST (tsconfig/gradle/Pod/pubspec)
+  → NETWORK/API                     → Search API service files → then .env → then interceptors
+  → INVESTIGATION                   → Search by feature name → read → report (don't fix yet)
+
+  If complex bug → Read shared/debugging-intelligence.md for pattern match
+</error_classification>
+
+<project_search>
+  STEP 1: Extract keywords from error:
+  → File/path in stack trace: [extract]
+  → Function/class/component name: [extract]
+  → Module/package name: [extract]
+  → Line number: [extract if available]
+  → Error code / HTTP status: [extract if available]
+
+  STEP 2: Filter noise from log (if user pasted log):
+  → SKIP: node_modules/*, React internals, engine frames
+  → FOCUS: lines with src/ paths, "Error:", "Caused by:", YOUR component names
+
+  STEP 3: Search project source code (MANDATORY):
+  → Grep "[keyword]" src/             ← ALWAYS start here (unless BUILD error)
+  → Grep "[function_name]" src/       ← find the actual function
+  → Glob "**/*[ComponentName]*"       ← find the actual file
+  → Results: [list files found]
+
+  STEP 4: Read matched files (TOP 3-5):
+  → Read [file1] — [what I found: actual code, types, imports]
+  → Read [file2] — [what I found: related logic, callers]
+  → Read [file3] — [what I found: state/store connected to this]
+
+  ⛔ If I skipped Step 1-4 → GO BACK AND DO THEM NOW
+  ⛔ If I found 0 results in src/ → widen: lib/ → app/ → project root
+</project_search>
 
 <source_verification>
-  ⚠️ BEFORE analyzing — verify I have real data:
-  - [ ] Read the actual file (not guessing from error message)
-  - [ ] Verified function/class names exist (grep)
+  ⚠️ Verify I have REAL project data (not assumptions):
+  - [ ] Classified error type and picked correct search strategy
+  - [ ] Filtered noise from log (if applicable)
+  - [ ] Searched src/ with Grep for error keywords → found files
+  - [ ] Read the actual file(s) where bug occurs
+  - [ ] Verified function/class names exist in project (grep result)
   - [ ] Checked package versions in package.json/pubspec.yaml
   - [ ] Identified data types from actual code (not assumed)
+  - [ ] Traced the call chain: who calls this → what it returns
 </source_verification>
 
-<context_needed>
-  - Read [file] to understand current implementation
-  - Grep for similar patterns: grep "[pattern]" src/
-  - Check imports and dependencies
-</context_needed>
+<root_cause_tracing>
+  ⛔ NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
 
-<root_cause>
-  [Analyze AFTER loading context - don't guess]
-  - What code is executed?
-  - What values are passed?
-  - What conditions are checked?
-  SOURCE: [file:line where the bug is — cite exact location]
-</root_cause>
+  STEP 1 — IMMEDIATE CAUSE (what throws):
+  - Error type: [from classification above]
+  - Crash/error at: [file:line from project search]
+  - What code does at that line: [describe from reading]
+  - What value is wrong: [actual vs expected]
+
+  STEP 2 — TRACE BACKWARD (what called this):
+  - Who calls this function? → [grep callers in src/]
+  - What data does caller pass? → [trace data origin]
+  - Go up one level: who calls the caller? → [trace further]
+
+  STEP 3 — ROOT CAUSE (where chain breaks):
+  - Root cause at: [file:line — where correct data becomes incorrect]
+  - WHY it fails: [based on actual code read, NOT guess]
+  - Does this match a known pattern? → [check debugging-intelligence.md if loaded]
+  - Does root cause explain ALL symptoms? YES/NO
+    → If NO → theory is wrong → re-trace from Step 2
+</root_cause_tracing>
+
+<working_example>
+  Search for similar working code in SAME project:
+  → Grep for similar pattern that works: [search term]
+  → Found working example at: [file:line] (or "none found")
+  → Differences between broken vs working:
+    1. [difference]
+    2. [difference]
+  → The fix should align broken code with working pattern
+</working_example>
+
+<hypothesis>
+  ⛔ 1 HYPOTHESIS → 1 MINIMAL CHANGE → VERIFY
+
+  HYPOTHESIS: [specific theory based on root cause]
+  CHANGE: [smallest possible change to test this — 1 change only]
+  EXPECTED RESULT: [what should happen if hypothesis is correct]
+
+  ⛔ If this fails → REVERT → form NEW hypothesis (never stack fixes)
+  ⛔ If 3 hypotheses fail → STOP → question architecture
+</hypothesis>
 
 <fix>
-  [Specific change with code snippet]
+  [Specific change with code snippet — before → after]
 
   WHY IT WORKS:
-  [Explain the fix based on root cause]
+  [Explain based on root cause tracing — not guess]
   SOURCE: [where this fix pattern comes from — project code / skill file / official docs]
+
+  DEFENSE IN DEPTH (make bug structurally impossible):
+  - Layer 1 (input): [validation added]
+  - Layer 2 (state): [guard added]
+  - Layer 3 (render): [null check / fallback added]
 </fix>
 
+<verification>
+  ⛔ NO COMPLETION CLAIMS WITHOUT EVIDENCE
+
+  🚩 Anti-rationalization check:
+  - Am I saying "should work now" without running it? → RUN IT
+  - Am I "confident" without evidence? → PROVE IT
+  - Am I stacking 3+ changes? → REVERT. 1 change only.
+
+  Evidence:
+  - [ ] Fix addresses root cause (not just symptoms)
+  - [ ] All symptoms explained by this root cause
+  - [ ] Working example pattern followed (if found)
+  - [ ] Defense-in-depth added at [N] layers
+  - [ ] Side effects checked (grep for other callers)
+  - [ ] Both platforms considered (iOS + Android)
+</verification>
+
 <side_effects>
-  - Files that import this: [list after grep]
+  - Files that import this: [list from grep results]
   - Tests affected: [list]
   - Platform-specific: iOS [impact] / Android [impact]
 </side_effects>
@@ -113,6 +211,64 @@ FILE: [path]
   - Update comments
   - Check for unused imports
 </cleanup>
+</think>
+```
+
+### Diagnostic Scan (user unsure / vague / "check this for me")
+
+```xml
+<think>
+USER SAID: [what user described or asked — could be vague]
+AREA: [extract: screen name / feature name / module name / file name]
+
+<area_identification>
+  What did user mention or show?
+  → Screen/feature name: [extract from user's words]
+  → File pasted/referenced: [if any]
+  → Behavior described: [if any]
+  → If unclear → I should ask: "Which screen or feature should I check?"
+</area_identification>
+
+<project_search>
+  Search broadly for this area:
+  → Grep "[feature]" src/            → found: [list files]
+  → Glob "**/*[ScreenName]*"         → found: [list files]
+  → Also search: related hooks, services, stores, utils
+  → Total files to scan: [N files]
+</project_search>
+
+<diagnostic_scan>
+  For EACH file, run the checklist:
+
+  FILE: [file1:path]
+  □ Crash risks:    [findings or "clean"]
+  □ Memory leaks:   [findings or "clean"]
+  □ Race conditions: [findings or "clean"]
+  □ Security:       [findings or "clean"]
+  □ Performance:    [findings or "clean"]
+  □ UX/states:      [findings or "clean"]
+  □ Data flow:      [trace API → state → render — any break?]
+  □ Edge cases:     [empty data? error response? offline? slow?]
+
+  FILE: [file2:path]
+  □ ... (repeat for each file)
+</diagnostic_scan>
+
+<report>
+  Scanned: [N files] in [area name]
+
+  🔴 Issues found:
+    1. [SEVERITY] [file:line] — [description]
+    2. [SEVERITY] [file:line] — [description]
+
+  🟡 Suspicious (might be intentional):
+    1. [file:line] — [what looks off and why]
+
+  ✅ Looks good:
+    - [aspect that's well-implemented]
+
+  Recommendation: [what to fix first / what to investigate deeper]
+</report>
 </think>
 ```
 

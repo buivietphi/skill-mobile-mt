@@ -46,8 +46,8 @@ skill-mobile-mt/
     │
     ├── ── CORE (always load) ──────────────────────────────────
     ├── code-review.md               ← Senior review checklist (865 tokens)
-    ├── bug-detection.md             ← Auto bug scanner (499 tokens)
-    ├── prompt-engineering.md        ← Auto-think + XML templates + advanced patterns (5,200 tokens)
+    ├── bug-detection.md             ← Intelligent bug scanner + error classification + stack trace parser (~2,200 tokens)
+    ├── prompt-engineering.md        ← Auto-think + XML templates + advanced patterns (5,500 tokens)
     │
     ├── ── ON-DEMAND (load by task) ────────────────────────────
     ├── error-recovery.md            ← 16 build/runtime error fixes (2,435 tokens)
@@ -66,6 +66,9 @@ skill-mobile-mt/
     ├── ci-cd.md                     ← GitHub Actions CI templates (2,500 tokens)
     ├── ai-dlc-workflow.md           ← AI-DLC structured workflow for complex features (2,500 tokens)
     ├── ui-ux-mobile.md              ← Design system, screen templates, touch, navigation, a11y (5,500 tokens)
+    ├── storage-patterns.md          ← MMKV / SecureStore / SQLite / WatermelonDB / Keychain — when to use what (~3,200 tokens)
+    ├── i18n-localization.md         ← i18next / slang / .xcstrings / strings.xml / RTL / date format (~3,500 tokens)
+    ├── debugging-intelligence.md    ← 30+ error patterns database + search strategies + issue investigation (~4,200 tokens)
     │
     ├── ── TEMPLATES (copy to your project) ────────────────────
     ├── claude-md-template.md        ← CLAUDE.md for Claude Code (copy to project root)
@@ -74,7 +77,9 @@ skill-mobile-mt/
 
 **Token totals:**
 - Smart load (1 platform + core shared): **~42,000 tokens** (32.8% of 128K)
-- Full load (all files): **~79,000 tokens** (61.7% of 128K)
+- Full load (all files): **~91,600 tokens** (71.5% of 128K)
+- debugging-intelligence.md, storage-patterns.md, i18n-localization.md: on-demand only — NOT loaded unless triggered
+- bug-detection.md now ~2,200 tokens (up from 499) — includes error classification, noise filter, stack trace parsing
 
 ---
 
@@ -89,10 +94,10 @@ skill-mobile-mt/
 SKILL.md                           (~15,800 tokens)
 + 1 platform file                  (~1,580–5,730 tokens depending on platform)
 + shared/code-review.md            (~1,500 tokens)
-+ shared/bug-detection.md          (~800 tokens)
-+ shared/prompt-engineering.md     (~5,200 tokens)
++ shared/bug-detection.md          (~2,200 tokens)
++ shared/prompt-engineering.md     (~5,500 tokens)
 ─────────────────────────────────────────────────
-≈ 42,000 tokens total (estimated)
+≈ 43,500 tokens total (estimated)
 ```
 
 **Use case:** Regular coding, new features, code review. Covers 90% of daily work.
@@ -106,6 +111,7 @@ The agent reads the task, then decides which extra file to load:
 | Task the user asks for | File loaded |
 |------------------------|-------------|
 | "Fix this crash / build error" | `shared/error-recovery.md` |
+| "Complex bug / long stack trace / investigate issue" | `shared/debugging-intelligence.md` |
 | "Read this screenshot / PDF / DOCX" | `shared/document-analysis.md` |
 | "Add analytics / logging / crash tracking" | `shared/anti-patterns.md` + `shared/observability.md` |
 | "Build a FlatList / animation" | `shared/performance-prediction.md` |
@@ -117,8 +123,10 @@ The agent reads the task, then decides which extra file to load:
 | "Setup CI/CD / GitHub Actions" | `shared/ci-cd.md` |
 | "Big feature / multi-screen" | `shared/ai-dlc-workflow.md` |
 | "Create/design screen / demo UI" | `shared/ui-ux-mobile.md` |
+| "Storage / MMKV / SecureStore / save data" | `shared/storage-patterns.md` |
+| "i18n / multi-language / translation / RTL" | `shared/i18n-localization.md` |
 
-**Load cost:** +500 to +3,500 tokens per on-demand file.
+**Load cost:** +500 to +4,200 tokens per on-demand file.
 
 ---
 
@@ -126,7 +134,7 @@ The agent reads the task, then decides which extra file to load:
 
 **No automatic trigger.** Full load happens when the AI reads every file without being selective — either because it's over-eager, or because the user explicitly asks for it.
 
-**Total:** ~72,300 tokens (56.5% of 128K, 36% of 200K)
+**Total:** ~91,600 tokens (71.5% of 128K, 45.8% of 200K)
 
 **How it actually works:**
 - `@skill-mobile-mt` only injects SKILL.md into context
