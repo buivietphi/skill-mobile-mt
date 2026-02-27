@@ -305,46 +305,55 @@ iOS only?
 
 | Scenario | Tokens | % of 128K | % of 200K |
 |----------|-------:|----------:|----------:|
-| SKILL.md only | ~13,400 | 10.5% | 6.7% |
-| + 1 platform + core shared/ | ~34,000 | 26.6% | 17.0% |
-| Cross-platform (RN/Flutter + iOS + Android) | ~70,000 | 54.7% | 35.0% |
-| All files loaded | ~76,300 | 59.6% | 38.2% |
-| **Smart load (recommended)** | **~34,000** | **26.6%** | **17.0%** |
+| SKILL.md only | ~25,150 | 19.6% | 12.6% |
+| **Smart load (recommended)** | **~53,350 – 57,350** | **42% – 45%** | **27% – 29%** |
+| Cross-platform (RN+Flutter+iOS+Android) | ~95,350 | 74.5% | 47.7% |
+| All files loaded | ~166,380 | 130.0% | 83.2% |
+| | | *exceeds 128K* | *fits 200K* |
 
 ### Per-file token breakdown
 
 | File | Tokens |
 |------|-------:|
-| `SKILL.md` | ~13,400 |
-| `AGENTS.md` | ~3,300 |
-| `react-native/react-native.md` | ~3,200 |
-| `flutter/flutter.md` | ~1,200 |
-| `ios/ios-native.md` | ~860 |
-| `android/android-native.md` | ~2,000 |
-| `shared/code-review.md` | ~6,600 |
-| `shared/bug-detection.md` | ~3,900 |
-| `shared/debugging-intelligence.md` | ~5,900 |
-| `shared/prompt-engineering.md` | ~4,700 |
-| `shared/architecture-intelligence.md` | ~2,500 |
-| `shared/common-pitfalls.md` | ~950 |
-| `shared/error-recovery.md` | ~1,700 |
-| `shared/document-analysis.md` | ~1,000 |
-| `shared/release-checklist.md` | ~590 |
-| `shared/anti-patterns.md` | ~1,750 |
-| `shared/performance-prediction.md` | ~950 |
-| `shared/platform-excellence.md` | ~1,250 |
-| `shared/version-management.md` | ~2,400 |
-| `shared/observability.md` | ~2,700 |
-| `shared/offline-first.md` | ~1,560 |
-| `shared/testing-strategy.md` | ~1,300 |
-| `shared/ci-cd.md` | ~1,290 |
-| `shared/ai-dlc-workflow.md` | ~1,380 |
-| `shared/ui-ux-mobile.md` | ~3,850 |
-| `shared/storage-patterns.md` | ~1,370 |
-| `shared/i18n-localization.md` | ~1,570 |
-| `shared/claude-md-template.md` | ~760 |
-| `shared/agent-rules-template.md` | ~2,140 |
-| **Total** | **~76,300** |
+| `SKILL.md` | ~25,150 |
+| `AGENTS.md` | ~6,440 |
+| `react-native/react-native.md` | ~5,840 |
+| `flutter/flutter.md` | ~2,350 |
+| `ios/ios-native.md` | ~1,660 |
+| `android/android-native.md` | ~4,370 |
+| `shared/code-review.md` | ~11,600 |
+| `shared/bug-detection.md` | ~7,290 |
+| `shared/debugging-intelligence.md` | ~8,730 |
+| `shared/prompt-engineering.md` | ~7,440 |
+| `shared/architecture-intelligence.md` | ~3,860 |
+| `shared/common-pitfalls.md` | ~1,330 |
+| `shared/error-recovery.md` | ~2,780 |
+| `shared/document-analysis.md` | ~1,520 |
+| `shared/release-checklist.md` | ~670 |
+| `shared/anti-patterns.md` | ~2,910 |
+| `shared/performance-prediction.md` | ~1,310 |
+| `shared/platform-excellence.md` | ~1,890 |
+| `shared/version-management.md` | ~3,660 |
+| `shared/observability.md` | ~5,750 |
+| `shared/offline-first.md` | ~2,930 |
+| `shared/testing-strategy.md` | ~2,500 |
+| `shared/ci-cd.md` | ~2,830 |
+| `shared/ai-dlc-workflow.md` | ~1,950 |
+| `shared/ui-ux-mobile.md` | ~6,910 |
+| `shared/storage-patterns.md` | ~2,760 |
+| `shared/i18n-localization.md` | ~3,140 |
+| `shared/intent-analysis.md` | ~6,250 |
+| `shared/code-generation-templates.md` | ~5,370 |
+| `shared/spec-to-code.md` | ~2,640 |
+| `shared/navigation-patterns.md` | ~2,900 |
+| `shared/complex-ui-patterns.md` | ~3,810 |
+| `shared/data-flow-patterns.md` | ~3,250 |
+| `shared/error-handling.md` | ~2,960 |
+| `shared/testing-patterns.md` | ~3,410 |
+| `shared/claude-md-template.md` | ~1,050 |
+| `shared/agent-rules-template.md` | ~2,870 |
+| `humanizer/humanizer-mobile.md` | ~2,630 |
+| **Total** | **~166,380** |
 
 ## Installed Structure
 

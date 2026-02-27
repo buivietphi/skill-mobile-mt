@@ -1,7 +1,7 @@
 ---
 name: skill-mobile-mt
 description: "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars: Ignite, Expensify, Mattermost, Immich, AppFlowy, Now in Android, TCA). Use when: building mobile features, fixing mobile bugs, reviewing mobile code, mobile architecture, React Native, Flutter, iOS Swift, Android Kotlin, mobile performance, mobile security audit, mobile code review, app release. Two modes: (1) default = pre-built production patterns, (2) 'project' = reads current project and adapts."
-version: "2.1.0"
+version: "2.1.1"
 author: buivietphi
 priority: high
 user-invocable: true
@@ -50,27 +50,30 @@ RULE 7: ASK AFTER 3 FAILS — 3 failed attempts at same error → STOP → prese
 
 1. [Cardinal Rules](#cardinal-rules-inviolable)
 2. [Task Router](#task-router)
-3. [Communication Protocol](#communication-protocol)
-4. [Decision Matrix Protocol](#decision-matrix-protocol)
-5. [Execution Modes](#execution-modes)
-6. [Mandatory Checkpoint](#mandatory-checkpoint)
-7. [Auto-Detect](#auto-detect)
-8. [Mobile Context](#mobile-context)
-9. [Mode Selection](#mode-selection)
-10. [Feature Scaffold Protocol](#feature-scaffold-protocol-project-mode)
-11. [Error Recovery Protocol](#error-recovery-protocol)
-12. [Quality Gate](#quality-gate)
-13. [Build & Deploy Gates](#build--deploy-gates)
-14. [Codebase Scan Strategy](#codebase-scan-strategy)
-15. [Smart Loading](#smart-loading)
-16. [Grounding Protocol (Anti-Hallucination)](#grounding-protocol-anti-hallucination)
-17. [Docs-First Protocol (Always Use Latest)](#docs-first-protocol-always-use-latest)
-18. [Security Protocol](#security-protocol)
-19. [Hard Bans](#hard-bans)
-20. [Mobile Anti-Patterns](#mobile-anti-patterns)
-21. [Leverage Pyramid](#leverage-pyramid-where-to-invest-review-time)
-22. [Session State Tracking](#session-state-tracking-for-long-tasks)
-23. [Reference Files](#reference-files)
+3. [Intent Analysis Detector](#intent-analysis-detector-auto-load-sharedintent-analysismd) *(routes to shared/intent-analysis.md)*
+4. [Multi-Fix Execution Protocol](#multi-fix-execution-protocol)
+5. [UI Fix Protocol](#ui-fix-protocol)
+6. [Communication Protocol](#communication-protocol)
+7. [Decision Matrix Protocol](#decision-matrix-protocol)
+8. [Execution Modes](#execution-modes)
+9. [Mandatory Checkpoint](#mandatory-checkpoint)
+10. [Auto-Detect](#auto-detect)
+11. [Mobile Context](#mobile-context)
+12. [Mode Selection](#mode-selection)
+13. [Feature Scaffold Protocol](#feature-scaffold-protocol-project-mode)
+14. [Error Recovery Protocol](#error-recovery-protocol)
+15. [Quality Gate](#quality-gate) *(includes Completion Re-check)*
+16. [Build & Deploy Gates](#build--deploy-gates)
+17. [Codebase Scan Strategy](#codebase-scan-strategy)
+18. [Smart Loading](#smart-loading)
+19. [Grounding Protocol (Anti-Hallucination)](#grounding-protocol-anti-hallucination)
+20. [Docs-First Protocol (Always Use Latest)](#docs-first-protocol-always-use-latest)
+21. [Security Protocol](#security-protocol)
+22. [Hard Bans](#hard-bans)
+23. [Mobile Anti-Patterns](#mobile-anti-patterns)
+24. [Leverage Pyramid](#leverage-pyramid-where-to-invest-review-time)
+25. [Session State Tracking](#session-state-tracking-for-long-tasks)
+26. [Reference Files](#reference-files)
 
 ---
 
@@ -84,11 +87,18 @@ RULE 7: ASK AFTER 3 FAILS — 3 failed attempts at same error → STOP → prese
 ```
 USER REQUEST                    → ACTION (Read tool required)
 ─────────────────────────────────────────────────────────────────
-"Create/build X feature"        → Feature Scaffold Protocol below (no extra file needed)
+"Create/build X feature"        → Check: is the spec clear or vague?
+                                  CLEAR → Feature Scaffold Protocol (no extra file needed)
+                                  VAGUE → Spec Analysis Protocol FIRST → confirm → then scaffold
                                   screen + hook + service + store + types
 
-"Create/add X screen/page"      → Feature Scaffold Protocol below — MINIMAL
-                                  screen + hook ONLY (no service/store)
+"Create/add X screen/page"      → Check: is the spec clear or vague?
+                                  CLEAR → Feature Scaffold Protocol — MINIMAL (screen + hook)
+                                  VAGUE → Spec Analysis Protocol FIRST → confirm → then scaffold
+
+"Build something like X app /   → Read: shared/intent-analysis.md (Spec Analysis Protocol)
+ similar to / standard / usual /    Parse → classify → present structured spec → wait confirm
+ you know what I mean"              ⛔ NEVER start coding without confirmed spec
 
 "Add X to existing Y"           → MODIFY existing files, don't create new structure
 
@@ -122,8 +132,8 @@ USER REQUEST                    → ACTION (Read tool required)
                                   Step 5: Root cause → fix → cite
                                   If long/complex trace → also Read: shared/debugging-intelligence.md
 
-"Check giùm / xem thử / sao nó  → ⛔ USER DOESN'T KNOW THE CAUSE — run Diagnostic Scan:
- lạ / something's off / not sure    Step 1: EXTRACT AREA from what user said or showed:
+"Take a look / something's off / → ⛔ USER DOESN'T KNOW THE CAUSE — run Diagnostic Scan:
+ not sure why / describe symptoms    Step 1: EXTRACT AREA from what user said or showed:
  why / take a look / describe         → Screen name? Feature name? Module name? File name?
  symptoms without error"              → If user paste code → that IS the area
                                       → If user describe behavior → extract the feature/screen name
@@ -148,34 +158,32 @@ USER REQUEST                    → ACTION (Read tool required)
 
 "Review" (generic, no scope)    → Read: shared/code-review.md → detect Review Mode:
                                   → Check git status → if changes exist → MODE: CHANGES
-                                  → If no changes → ASK user: "Review full code hay file cụ thể?"
+                                  → If no changes → ASK user: "Review full codebase or specific file?"
 
-"Review full / review toàn bộ"  → Read: shared/code-review.md → MODE: FULL
+"Review full code / audit"      → Read: shared/code-review.md → MODE: FULL
                                   Read ALL src/ files → 12-category checklist → full report
 
-"Review changes / review thay đổi /
- review code đã sửa"            → Read: shared/code-review.md → MODE: CHANGES
+"Review changes / review diff"  → Read: shared/code-review.md → MODE: CHANGES
                                   git diff → review only changed lines + context
 
-"Review file X / review file này" → Read: shared/code-review.md → MODE: FILE
-                                    Read specified file → 12-category checklist on that file
+"Review file X / this file"     → Read: shared/code-review.md → MODE: FILE
+                                  Read specified file → 12-category checklist on that file
 
-"Review function X / review hàm" → Read: shared/code-review.md → MODE: FUNCTION
-                                   Find function → trace callers → deep review
+"Review function X / this func" → Read: shared/code-review.md → MODE: FUNCTION
+                                  Find function → trace callers → deep review
 
-"Review PR / review pull request" → Read: shared/code-review.md → MODE: PR
-                                    Read: shared/anti-patterns.md
-                                    Step 0 PR-Level → git diff base..HEAD → 12-category → verdict
+"Review PR / pull request"      → Read: shared/code-review.md → MODE: PR
+                                  Read: shared/anti-patterns.md
+                                  Step 0 PR-Level → git diff base..HEAD → 12-category → verdict
 
-"Review modified files /
- review file đã sửa"             → Read: shared/code-review.md → MODE: MODIFIED
-                                   git status → read modified files → review
+"Review modified files"         → Read: shared/code-review.md → MODE: MODIFIED
+                                  git status → read modified files → review
 
-"Review commit / review commits"  → Read: shared/code-review.md → MODE: COMMITS
-                                   git log → git show each commit → review diffs
+"Review commits"                → Read: shared/code-review.md → MODE: COMMITS
+                                  git log → git show each commit → review diffs
 
-"Check PR / check review PR"     → Read: shared/code-review.md → MODE: PR-CHECK
-                                   Step 0 ONLY (size, scope, tests, commits) → quick ✅/🔴
+"Check PR"                      → Read: shared/code-review.md → MODE: PR-CHECK
+                                  Step 0 ONLY (size, scope, tests, commits) → quick ✅/🔴
 
 "Review accessibility / a11y"   → Read: shared/code-review.md (§ Accessibility)
                                   then: WCAG 2.1 mobile checklist — labels, touch targets,
@@ -259,10 +267,249 @@ USER REQUEST                    → ACTION (Read tool required)
 "How much work / big change? /   → Estimation Protocol (in Decision Matrix Protocol section)
  scope / effort / risk"            Scan → classify XS/S/M/L/XL → risk → present
 
+"Fix UI / match design /           → UI Fix Protocol (in this file)
+ adjust layout / UI broken /          Step 1: Identify what → Step 2: Read component tree
+ UI mismatch / layout wrong"          Step 3: Trace style chain → Step 4: Fix → Step 5: Verify
+
+"Fix multiple / fix A then B /    → Read: shared/intent-analysis.md (Task Extraction Protocol)
+ multiple files / fix + fix +        Extract ALL tasks → classify → order → track → verify ALL
+ fix UI + fix bug + add X"           ⛔ NEVER start until ALL tasks are listed
+
+"Update UI to match design /      → UI Fix Protocol (in this file)
+ Figma / screenshot / mockup"        Read component tree → trace style → fix → verify both themes
+
+"Make it better / improve this /  → Read: shared/intent-analysis.md (Scope Clarification Protocol)
+ fix everything / clean up /         Detect vague → clarify scope → set completion criteria
+ something is wrong / not right"     ⛔ NEVER start coding until scope is clear
+
+"It's slow / doesn't work /      → Read: shared/intent-analysis.md (Intent Understanding Protocol)
+ button doesn't work / blank /       Map non-technical → technical → search code → fix
+ freezes / flickers / keeps          Confirm interpretation before acting
+ crashing / shows old data"
+
+"Fix that / same for this one /   → Read: shared/intent-analysis.md (Context Tracking)
+ the other screen / do it again /    Resolve pronoun → confirm reference → proceed
+ like before / undo that"            ⛔ NEVER guess when reference is ambiguous
+
+"URGENT / production down /       → Read: shared/intent-analysis.md (Priority Detection)
+ before release / deadline /         Adjust depth: CRITICAL=fix only, HIGH=fix+verify
+ blocker / ASAP"                     Skip nice-to-haves, communicate progress
+
+"Build feature from spec /        → Read: shared/spec-to-code.md
+ implement from requirements /       Parse → dependency graph → file plan → types-first → implement
+ convert spec to code"              ⛔ NEVER skip type definitions
+
+"Setup state management /         → Read: shared/code-generation-templates.md
+ add Zustand / Redux / Riverpod /    Production templates with persist, middleware, selectors
+ setup API client / setup forms /    API client with retry + token refresh + error normalization
+ form validation"                    Forms with Zod, multi-step, file upload
+
+"Add navigation / auth flow /     → Read: shared/navigation-patterns.md
+ deep links / modal / tabs /         Auth stack, deep link config, modal groups, tab persistence
+ push notifications /                Push notification setup + deep link from notification
+ permissions"                        Permission request + denied handling + settings redirect
+
+"Carousel / swipe / gestures /    → Read: shared/complex-ui-patterns.md
+ responsive / tablet / keyboard /    Image carousel, swipe cards, gesture handling
+ dark mode / skeleton /              Responsive layout, keyboard avoidance, dark mode theme
+ accessibility / a11y"              Skeleton loading, accessibility implementation per platform
+
+"Pagination / infinite scroll /   → Read: shared/data-flow-patterns.md
+ optimistic update / cache /         Cursor + offset pagination, prefetching
+ real-time / WebSocket /             Optimistic updates with rollback, cache invalidation
+ offline queue"                      WebSocket manager, offline request queue
+
+"Error handling / retry /         → Read: shared/error-handling.md
+ error boundary / toast /            Error type hierarchy, user-facing messages
+ global error handler"              Error boundary, retry with backoff, toast notifications
+
+"Write unit tests / component     → Read: shared/testing-patterns.md
+ tests / mock / factory /            Component tests (4 states), hook tests, service tests
+ test setup / test helpers"          Test factories, provider wrapper, snapshot strategy
+
 ```
 
 **⛔ NEVER start coding without identifying the task type first.**
 **⛔ NEVER reference a file's content without using Read tool to open it first.**
+
+---
+
+## Intent Analysis Detector (auto-load shared/intent-analysis.md)
+
+**BEFORE coding: detect if input needs deep analysis. If yes → Read shared/intent-analysis.md.**
+
+```
+═══ COMPLEXITY SIGNALS — auto-trigger Read: shared/intent-analysis.md ═══
+
+MULTI-PART → Task Extraction Protocol:
+  - Multiple sentences with different requests
+  - Comma-separated requests ("fix A, fix B, add C")
+  - References to multiple files/screens/components
+  ⛔ NEVER start coding after reading only the first sentence
+
+VAGUE INPUT → Scope Clarification Protocol:
+  - "Make it better / fix the UI / improve this / fix everything"
+  - No specific screen, component, or symptom mentioned
+  ⛔ NEVER guess what "better" means — clarify first
+
+NON-TECHNICAL → Intent Understanding Protocol:
+  - "Button doesn't work / screen is blank / it freezes / takes forever"
+  - Map everyday language → technical cause → search code → fix
+  ⛔ NEVER ask user for error message if they clearly don't have one
+
+CONTEXT REFERENCE → Intent Understanding Protocol — Context Tracking:
+  - "Fix that / same for this one / the other screen / like before"
+  - Resolve pronoun → confirm reference → proceed
+  ⛔ NEVER guess when reference is ambiguous
+
+URGENCY → Intent Understanding Protocol — Priority Detection:
+  - CRITICAL: "URGENT / production down / users affected"
+  - HIGH: "before release / deadline / blocker"
+  - LOW: "when you get a chance / not urgent / nice to have"
+
+VAGUE FEATURE → Spec Analysis Protocol:
+  - "Build X like other apps / something similar to Y / you know what I mean"
+  - Present ✅/❓/⚠️ structured spec → wait confirm → then build
+  ⛔ NEVER start building from a vague description
+
+CLEAR INPUT (skip — proceed to Task Router directly):
+  - "Fix the login button — it doesn't respond to tap"
+  - "Add loading spinner to ProfileScreen"
+  - Single task with specific target + action
+```
+
+---
+
+## Multi-Fix Execution Protocol
+
+**When fixing multiple issues across multiple files:**
+
+```
+⛔ DO NOT edit 5 files then check if it works.
+✅ Fix → Verify → Fix → Verify → Fix → Verify (incremental)
+
+═══ EXECUTION FLOW ═══
+
+PHASE 1: MAP (before any edit)
+  → Read ALL affected files first (parallel reads)
+  → Map dependencies: "File A imports from File B"
+  → Identify shared code: "Both Screen X and Screen Y use useAuth"
+  → Decide order: edit shared/base code FIRST, then consumers
+
+PHASE 2: EXECUTE (one fix at a time)
+  For each task (in dependency order):
+    1. STATE what you're fixing: "Fixing TASK 2: crash on back press"
+    2. READ the target file(s) — even if read before (Context Staleness Rule)
+    3. EDIT — make the change
+    4. VERIFY — check imports resolve, types pass, no new errors
+    5. MARK complete: "✅ TASK 2 done"
+    6. CHECK SIDE EFFECTS: did this change break anything else?
+       → If yes → fix the side effect BEFORE moving to next task
+
+PHASE 3: FINAL VERIFICATION
+  → Re-read ALL modified files
+  → Run Quality Gate on each
+  → Verify no circular breakage (File A fix didn't break File B fix)
+  → List all changes: "Modified: FileA.tsx (line 45), FileB.tsx (line 12, 89)"
+
+═══ SIDE EFFECTS MAP ═══
+
+When editing a file, CHECK these for side effects:
+  SHARED HOOK changed?     → Re-check ALL screens that use it
+  NAVIGATION changed?      → Re-check ALL screens that navigate to/from it
+  TYPE/INTERFACE changed?   → Re-check ALL files that import it
+  API SERVICE changed?      → Re-check ALL hooks/screens that call it
+  STYLE/THEME changed?      → Re-check ALL components using that style
+  STATE SHAPE changed?      → Re-check ALL selectors/consumers
+
+═══ CONFLICT DETECTION ═══
+
+Before editing a file that was already edited in this session:
+  → RE-READ the file (your earlier edit is already applied)
+  → Verify your new edit doesn't revert the previous fix
+  → If conflict: merge both fixes into one coherent edit
+```
+
+---
+
+## UI Fix Protocol
+
+**When user asks to fix UI / match design / adjust layout:**
+
+```
+⛔ DO NOT guess what the UI should look like.
+✅ READ the actual component code first.
+✅ TRACE the style chain: component → stylesheet → theme → platform.
+
+═══ UI FIX WORKFLOW ═══
+
+STEP 1: IDENTIFY what needs fixing
+  → User says "fix UI" → ASK: "Which screen/component? What's wrong specifically?"
+  → User shows screenshot → Compare with code structure
+  → User references design → Read the design spec/figma description
+
+STEP 2: READ the component tree (top-down)
+  → Screen file (the container)
+  → Child components used in that screen
+  → Shared components (Button, Input, Card, etc.)
+  → Style files / theme files
+  → DO NOT skip any layer — UI bugs often come from parent, not child
+
+STEP 3: TRACE the style chain
+  For each UI element to fix:
+    → Inline style? → check the style object
+    → StyleSheet? → find the stylesheet, check the exact rule
+    → Theme? → check if theme variable is correct
+    → Platform-specific? → check Platform.OS / platform files
+    → Responsive? → check Dimensions / useWindowDimensions
+    → Dark mode? → check if both light/dark have the value
+
+STEP 4: FIX with precision
+  → Edit ONLY the specific style/layout property
+  → DO NOT refactor the entire component "while you're at it"
+  → Preserve existing patterns (if project uses StyleSheet, don't switch to inline)
+
+STEP 5: VERIFY the fix
+  → Re-read the component → does the fix make visual sense?
+  → Check sibling components → are they still consistent?
+  → Check platform: if RN → both iOS and Android affected?
+  → Check theme: if dark mode exists → fix applies to both themes?
+
+═══ COMMON UI FIX PATTERNS ═══
+
+SPACING/ALIGNMENT:
+  → Check: padding, margin, flex, alignItems, justifyContent
+  → Common mistake: mixing padding on parent AND child → double spacing
+  → Fix: adjust ONE layer, not both
+
+TEXT NOT SHOWING / CUT OFF:
+  → Check: numberOfLines, flex: 1, width, overflow
+  → Common mistake: parent has fixed height → child text truncated
+  → Fix: use flexShrink/flexGrow or remove fixed height
+
+IMAGE WRONG SIZE:
+  → Check: resizeMode, width/height, aspectRatio
+  → Common mistake: no explicit dimensions → image takes natural size
+  → Fix: set explicit width + aspectRatio (not width + height)
+
+LIST PERFORMANCE:
+  → Check: FlatList vs ScrollView, keyExtractor, getItemLayout
+  → Common mistake: ScrollView with 100+ items → jank
+  → Fix: switch to FlatList + add keyExtractor + getItemLayout if fixed height
+
+KEYBOARD OVERLAP:
+  → Check: KeyboardAvoidingView, behavior (iOS=padding, Android=height)
+  → Common mistake: no KeyboardAvoidingView → input hidden behind keyboard
+  → Fix: wrap in KeyboardAvoidingView with correct behavior per platform
+
+═══ MULTI-SCREEN UI FIX ═══
+
+When fixing UI across multiple screens:
+  → FIX shared components FIRST (Button, Header, Input, etc.)
+  → Then fix individual screens (they inherit from shared)
+  → Verify consistency: same Button should look same on all screens
+  → Check navigation transitions: screen A → screen B still smooth?
+```
 
 ---
 
@@ -898,9 +1145,41 @@ STEP 2: REVIEW — Re-read your own code with fresh eyes:
   - Would a senior dev approve this in code review?
   - Am I importing anything that doesn't exist in the project?
 STEP 3: REFINE — Fix issues found in review
-STEP 4: VERIFY — Run Quality Gate above → all pass? → DONE
+STEP 4: VERIFY — Run Quality Gate above → all pass?
+STEP 5: COMPLETION RE-CHECK (MANDATORY — never skip)
+  → Re-read the user's ORIGINAL message (scroll up if needed)
+  → List every task/request the user made
+  → For EACH task, verify:
+    □ Was it actually done? (not just planned, actually EDITED)
+    □ Which file:line was changed?
+    □ Does the change match what user asked?
+  → If ANY task was missed → DO IT NOW before saying "done"
+  → Report:
+    "✅ Done. Changes:"
+    "1. [task] → [file:line] — [what changed]"
+    "2. [task] → [file:line] — [what changed]"
 
 If STEP 2 finds issues → loop back to STEP 3 (max 2 loops)
+If STEP 5 finds missed tasks → loop back to STEP 1 for those tasks
+```
+
+### Common "Forgot to Complete" Patterns
+
+```
+⛔ PATTERN 1: "I'll do that next" → then never does it
+  → FIX: Track with Task Extraction Protocol, check off each task
+
+⛔ PATTERN 2: Read the file, understand the issue, but forgot to EDIT
+  → FIX: After each task, verify you actually USED the Edit/Write tool
+
+⛔ PATTERN 3: Fixed file A, but file B also needed the same fix
+  → FIX: After fixing, Grep for same pattern in other files
+
+⛔ PATTERN 4: Fixed the logic but forgot to update the UI/types/tests
+  → FIX: Side Effects Map (see Multi-Fix Execution Protocol)
+
+⛔ PATTERN 5: User said "fix multiple places" but AI fixed only the first one
+  → FIX: Task Extraction Protocol → extract ALL → track ALL → verify ALL
 ```
 
 ### Context Staleness Rule
@@ -1175,6 +1454,14 @@ SCAN PROTOCOL:
 | All platforms | `shared/storage-patterns.md` | 🟡 Task Router says so |
 | All platforms | `shared/i18n-localization.md` | 🟡 Task Router says so |
 | All platforms | `shared/debugging-intelligence.md` | 🟡 Complex bugs / stack traces / issue investigation |
+| All platforms | `shared/intent-analysis.md` | 🟡 Multi-part, vague, non-technical, or ambiguous input |
+| All platforms | `shared/code-generation-templates.md` | 🟡 State management, API client, forms setup |
+| All platforms | `shared/spec-to-code.md` | 🟡 Building feature from spec/requirements |
+| All platforms | `shared/navigation-patterns.md` | 🟡 Auth flow, deep links, modals, tabs, permissions |
+| All platforms | `shared/complex-ui-patterns.md` | 🟡 Carousel, gestures, responsive, dark mode, a11y |
+| All platforms | `shared/data-flow-patterns.md` | 🟡 Pagination, optimistic updates, cache, WebSocket |
+| All platforms | `shared/error-handling.md` | 🟡 Error hierarchy, retry, error boundary, toast |
+| All platforms | `shared/testing-patterns.md` | 🟡 Component tests, hook tests, factories, snapshots |
 
 **Cross-platform:** Flutter/RN projects also Read `ios/ios-native.md` + `android/android-native.md` for native modules.
 

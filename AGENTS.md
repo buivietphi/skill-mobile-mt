@@ -27,48 +27,56 @@
 
 ```
 skill-mobile-mt/
-├── SKILL.md                        ← Entry point. Always load first. (~13,700 tokens)
+├── SKILL.md                        ← Entry point. Always load first. (~25,150 tokens)
 ├── AGENTS.md                       ← This file. Multi-agent config.
 │
 ├── react-native/
-│   └── react-native.md             ← RN + Expo patterns (~3,300 tokens)
+│   └── react-native.md             ← RN + Expo patterns (~5,840 tokens)
 │
 ├── flutter/
-│   └── flutter.md                  ← Flutter + Dart 3.x patterns (~1,200 tokens)
+│   └── flutter.md                  ← Flutter + Dart 3.x patterns (~2,350 tokens)
 │
 ├── ios/
-│   └── ios-native.md               ← Swift + UIKit/SwiftUI patterns (~880 tokens)
+│   └── ios-native.md               ← Swift + UIKit/SwiftUI patterns (~1,660 tokens)
 │
 ├── android/
-│   └── android-native.md           ← Kotlin + Compose + Java legacy patterns (~2,100 tokens)
+│   └── android-native.md           ← Kotlin + Compose + Java legacy patterns (~4,370 tokens)
 │
 └── shared/
     │
     ├── ── CORE (always load) ──────────────────────────────────
-    ├── code-review.md               ← 12-category PR-level review + grounded review + 25 production crash patterns (all platforms) (~6,600 tokens)
-    ├── bug-detection.md             ← Intelligent bug scanner + git-aware Phase 0 + error classification + stack trace parser (~3,900 tokens)
-    ├── prompt-engineering.md        ← Auto-think + XML templates + advanced patterns (~4,900 tokens)
+    ├── code-review.md               ← 12-category PR-level review + grounded review + 25 production crash patterns (all platforms) (~11,600 tokens)
+    ├── bug-detection.md             ← Intelligent bug scanner + git-aware Phase 0 + error classification + stack trace parser (~7,290 tokens)
+    ├── prompt-engineering.md        ← Auto-think + XML templates + advanced patterns (~7,440 tokens)
     │
     ├── ── ON-DEMAND (load by task) ────────────────────────────
-    ├── error-recovery.md            ← 16 build/runtime error fixes (~1,800 tokens)
-    ├── document-analysis.md         ← Parse images/PDFs/DOCX → code (~1,100 tokens)
-    ├── anti-patterns.md             ← PII, cardinality, payload detection (~1,800 tokens)
-    ├── performance-prediction.md    ← Frame budget, FPS prediction (~970 tokens)
-    ├── platform-excellence.md       ← iOS 18+ vs Android 15+ UX + HIG (~1,300 tokens)
-    ├── version-management.md        ← SDK compat matrix + release testing (~2,500 tokens)
-    ├── observability.md             ← Sessions as 4th pillar (~2,800 tokens)
-    ├── architecture-intelligence.md ← Patterns from 30+ production repos (~2,600 tokens)
-    ├── common-pitfalls.md           ← Known issue patterns (~970 tokens)
-    ├── release-checklist.md         ← App Store/Play Store checklist (~600 tokens)
+    ├── error-recovery.md            ← 16 build/runtime error fixes (~2,780 tokens)
+    ├── document-analysis.md         ← Parse images/PDFs/DOCX → code (~1,520 tokens)
+    ├── anti-patterns.md             ← PII, cardinality, payload detection (~2,910 tokens)
+    ├── performance-prediction.md    ← Frame budget, FPS prediction (~1,310 tokens)
+    ├── platform-excellence.md       ← iOS 18+ vs Android 15+ UX + HIG (~1,890 tokens)
+    ├── version-management.md        ← SDK compat matrix + release testing (~3,660 tokens)
+    ├── observability.md             ← Sessions as 4th pillar (~5,750 tokens)
+    ├── architecture-intelligence.md ← Patterns from 30+ production repos (~3,860 tokens)
+    ├── common-pitfalls.md           ← Known issue patterns (~1,330 tokens)
+    ├── release-checklist.md         ← App Store/Play Store checklist (~670 tokens)
     │
-    ├── offline-first.md             ← Local-first + sync patterns (~1,600 tokens)
-    ├── testing-strategy.md          ← Detox + Maestro + XCUITest + Espresso E2E (~1,300 tokens)
-    ├── ci-cd.md                     ← GitHub Actions CI templates (~1,300 tokens)
-    ├── ai-dlc-workflow.md           ← AI-DLC structured workflow for complex features (~1,400 tokens)
-    ├── ui-ux-mobile.md              ← Design system, screen templates, touch, navigation, a11y (~3,900 tokens)
-    ├── storage-patterns.md          ← MMKV / SecureStore / SQLite / WatermelonDB / Keychain (~1,400 tokens)
-    ├── i18n-localization.md         ← i18next / slang / .xcstrings / strings.xml / RTL / date format (~1,600 tokens)
-    ├── debugging-intelligence.md    ← 45+ error patterns (RN+Flutter+iOS+Android) + git-aware debugging + search strategies (~5,900 tokens)
+    ├── offline-first.md             ← Local-first + sync patterns (~2,930 tokens)
+    ├── testing-strategy.md          ← Detox + Maestro + XCUITest + Espresso E2E (~2,500 tokens)
+    ├── ci-cd.md                     ← GitHub Actions CI templates (~2,830 tokens)
+    ├── ai-dlc-workflow.md           ← AI-DLC structured workflow for complex features (~1,950 tokens)
+    ├── ui-ux-mobile.md              ← Design system, screen templates, touch, navigation, a11y (~6,910 tokens)
+    ├── storage-patterns.md          ← MMKV / SecureStore / SQLite / WatermelonDB / Keychain (~2,760 tokens)
+    ├── i18n-localization.md         ← i18next / slang / .xcstrings / strings.xml / RTL / date format (~3,140 tokens)
+    ├── debugging-intelligence.md    ← 45+ error patterns (RN+Flutter+iOS+Android) + git-aware debugging + search strategies (~8,730 tokens)
+    ├── intent-analysis.md          ← Task extraction, scope clarification, intent understanding, spec analysis (~6,250 tokens)
+    ├── code-generation-templates.md ← Zustand/Redux/Riverpod, API client, forms, type generation (~5,370 tokens)
+    ├── spec-to-code.md             ← Spec → dependency graph → file plan → implementation (~2,640 tokens)
+    ├── navigation-patterns.md      ← Auth flow, deep links, modals, tabs, push, permissions (~2,900 tokens)
+    ├── complex-ui-patterns.md      ← Carousel, gestures, keyboard, responsive, dark mode, a11y (~3,810 tokens)
+    ├── data-flow-patterns.md       ← Pagination, optimistic updates, cache, WebSocket, offline queue (~3,250 tokens)
+    ├── error-handling.md           ← Error hierarchy, retry, error boundary, user messages (~2,960 tokens)
+    ├── testing-patterns.md         ← Component tests, hook tests, factories, snapshots (~3,410 tokens)
     │
     ├── ── TEMPLATES (copy to your project) ────────────────────
     ├── claude-md-template.md        ← CLAUDE.md for Claude Code (copy to project root)
@@ -76,12 +84,13 @@ skill-mobile-mt/
 ```
 
 **Token totals:**
-- Smart load (1 platform + core shared): **~34,000 tokens** (26.6% of 128K)
-- Full load (all files): **~76,300 tokens** (59.6% of 128K)
-- debugging-intelligence.md, storage-patterns.md, i18n-localization.md: on-demand only — NOT loaded unless triggered
-- code-review.md now ~6,600 tokens — 12-category PR-level review + grounded review + 25 production crash patterns (all 4 platforms)
-- bug-detection.md now ~3,900 tokens — git-aware Phase 0, error classification, noise filter, stack trace parsing (all 4 platforms)
-- debugging-intelligence.md now ~5,900 tokens — 45+ error patterns across RN, Flutter, iOS Swift, Android Kotlin
+- Smart load (SKILL.md + 1 platform + core shared): **~53,350 – 57,350 tokens** (42% – 45% of 128K)
+- Full load (all files): **~166,380 tokens** (exceeds 128K — use smart load for 128K models)
+- Full load fits within **200K context** (83% of 200K)
+- On-demand files (NOT loaded unless triggered): debugging-intelligence, storage-patterns, i18n-localization, observability, architecture-intelligence, etc.
+- code-review.md ~11,600 tokens — 12-category PR-level review + 25 production crash patterns (all 4 platforms)
+- bug-detection.md ~7,290 tokens — git-aware Phase 0, error classification, stack trace parsing (all 4 platforms)
+- debugging-intelligence.md ~8,730 tokens — 45+ error patterns across RN, Flutter, iOS Swift, Android Kotlin
 
 ---
 
@@ -93,13 +102,13 @@ skill-mobile-mt/
 
 **Loads automatically:**
 ```
-SKILL.md                           (~13,700 tokens)
-+ 1 platform file                  (~880–3,300 tokens depending on platform)
-+ shared/code-review.md            (~6,600 tokens)
-+ shared/bug-detection.md          (~3,900 tokens)
-+ shared/prompt-engineering.md     (~4,900 tokens)
+SKILL.md                           (~25,150 tokens)
++ 1 platform file                  (~1,660–5,840 tokens depending on platform)
++ shared/code-review.md            (~11,600 tokens)
++ shared/bug-detection.md          (~7,290 tokens)
++ shared/prompt-engineering.md     (~7,440 tokens)
 ─────────────────────────────────────────────────
-≈ 34,000 tokens total (estimated)
+≈ 53,350 – 57,350 tokens total (42%–45% of 128K)
 ```
 
 **Use case:** Regular coding, new features, code review. Covers 90% of daily work.
@@ -128,6 +137,18 @@ The agent reads the task, then decides which extra file to load:
 | "Storage / MMKV / SecureStore / save data" | `shared/storage-patterns.md` |
 | "i18n / multi-language / translation / RTL" | `shared/i18n-localization.md` |
 | "Review PR / review code / accessibility check" | `shared/code-review.md` (already loaded) + `shared/anti-patterns.md` |
+| "Fix multiple / fix A then B / several places" | `shared/intent-analysis.md` (Task Extraction Protocol) |
+| "Make it better / fix everything / vague request" | `shared/intent-analysis.md` (Scope Clarification Protocol) |
+| "It's slow / doesn't work / non-technical description" | `shared/intent-analysis.md` (Intent Understanding Protocol) |
+| "Build X like other apps / vague feature spec" | `shared/intent-analysis.md` (Spec Analysis Protocol) |
+| "URGENT / production down / deadline / blocker" | `shared/intent-analysis.md` (Priority Detection) |
+| "Build from spec / implement requirements" | `shared/spec-to-code.md` |
+| "Setup state / Zustand / Redux / API client / forms" | `shared/code-generation-templates.md` |
+| "Auth flow / deep links / modals / tabs / permissions" | `shared/navigation-patterns.md` |
+| "Carousel / gestures / responsive / dark mode / a11y" | `shared/complex-ui-patterns.md` |
+| "Pagination / optimistic / cache / WebSocket / offline" | `shared/data-flow-patterns.md` |
+| "Error handling / retry / error boundary / toast" | `shared/error-handling.md` |
+| "Component tests / unit tests / mock / factory" | `shared/testing-patterns.md` |
 | "Compare options / best approach / upgrade vs stay" | SKILL.md Decision Matrix Protocol (already loaded) |
 
 **Load cost:** +600 to +5,900 tokens per on-demand file.
@@ -138,7 +159,7 @@ The agent reads the task, then decides which extra file to load:
 
 **No automatic trigger.** Full load happens when the AI reads every file without being selective — either because it's over-eager, or because the user explicitly asks for it.
 
-**Total:** ~76,300 tokens (59.6% of 128K, 38.2% of 200K)
+**Total:** ~100,880 tokens (78.8% of 128K, 50.4% of 200K)
 
 **How it actually works:**
 - `@skill-mobile-mt` only injects SKILL.md into context
@@ -163,7 +184,7 @@ The agent reads the task, then decides which extra file to load:
 ```yaml
 skill:
   name: skill-mobile-mt
-  version: "2.1.0"
+  version: "2.1.1"
   author: buivietphi
   category: engineering
   tags:
@@ -230,9 +251,10 @@ skill:
     java: ".java files in app/src/"
 
   context_budget:
-    max_tokens: 76300
-    smart_load_tokens: 34000
-    savings: "~47%"
+    max_tokens: 166380
+    smart_load_tokens: 57350
+    fits_128k: "smart load only"
+    fits_200k: "full load (83%)"
 ```
 
 ---
@@ -281,6 +303,14 @@ Every agent MUST follow this loading sequence:
    - shared/storage-patterns.md       (when choosing or implementing local storage)
    - shared/i18n-localization.md      (when implementing multi-language or RTL)
    - shared/debugging-intelligence.md (when investigating complex bugs or long stack traces)
+   - shared/intent-analysis.md      (when input is multi-part, vague, non-technical, or ambiguous)
+   - shared/code-generation-templates.md (when setting up state management, API client, or forms)
+   - shared/spec-to-code.md         (when building new feature from spec or requirements)
+   - shared/navigation-patterns.md  (when implementing auth flow, deep links, modals, tabs, permissions)
+   - shared/complex-ui-patterns.md  (when building carousel, gestures, responsive layout, dark mode, a11y)
+   - shared/data-flow-patterns.md   (when implementing pagination, optimistic updates, cache, WebSocket)
+   - shared/error-handling.md       (when implementing error handling, retry, error boundary)
+   - shared/testing-patterns.md     (when writing component tests, hook tests, or setting up test factories)
 
 7. SKIP non-matching platform subfolders (saves ~66% context)
 ```
@@ -308,6 +338,14 @@ Priority 6 (ON-DEMAND): shared/ai-dlc-workflow.md — AI-DLC structured workflow
 Priority 6 (ON-DEMAND): shared/ui-ux-mobile.md — Screen templates, design tokens, components, dark mode
 Priority 6 (ON-DEMAND): shared/storage-patterns.md — MMKV, SecureStore, SQLite, WatermelonDB, Keychain
 Priority 6 (ON-DEMAND): shared/i18n-localization.md — i18next, slang, .xcstrings, strings.xml, RTL
+Priority 6 (ON-DEMAND): shared/intent-analysis.md — Task extraction, scope clarification, intent understanding, spec analysis
+Priority 6 (ON-DEMAND): shared/code-generation-templates.md — Zustand/Redux/Riverpod, API client, forms, types
+Priority 6 (ON-DEMAND): shared/spec-to-code.md — Spec → dependency graph → file plan → implementation
+Priority 6 (ON-DEMAND): shared/navigation-patterns.md — Auth flow, deep links, modals, tabs, push, permissions
+Priority 6 (ON-DEMAND): shared/complex-ui-patterns.md — Carousel, gestures, keyboard, responsive, dark mode, a11y
+Priority 6 (ON-DEMAND): shared/data-flow-patterns.md — Pagination, optimistic updates, cache, WebSocket, offline queue
+Priority 6 (ON-DEMAND): shared/error-handling.md — Error hierarchy, retry, error boundary, user messages
+Priority 6 (ON-DEMAND): shared/testing-patterns.md — Component tests, hook tests, factories, snapshots
 Priority 6 (ON-DEMAND): shared/debugging-intelligence.md — 30+ error patterns, git-aware debugging
 ```
 
@@ -487,10 +525,10 @@ npx @buivietphi/skill-mobile-mt --init all        # → all files
 {
   "id": "skill-mobile-mt",
   "name": "skill-mobile-mt",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "buivietphi",
   "category": "engineering",
-  "description": "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars) + research from top 53k+ star skill repos. Cardinal rules, self-critique loops, leverage pyramid, verification-first, decision matrix, codebase scan strategy, grounded code review (anti-false-positive), git-aware debugging. React Native, Flutter, iOS, Android.",
+  "description": "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars) + research from top 53k+ star skill repos. Cardinal rules, self-critique loops, leverage pyramid, verification-first, decision matrix, codebase scan strategy, grounded code review (anti-false-positive), git-aware debugging, task extraction protocol, multi-fix execution, UI fix protocol, completion re-check. React Native, Flutter, iOS, Android.",
   "risk": "low",
   "source": "buivietphi (MIT)",
   "platforms": ["react-native", "flutter", "ios", "android"],

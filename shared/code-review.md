@@ -50,14 +50,14 @@ CROSS-PLATFORM patterns (API contract, token expiry, navigation params):
 
 USER SAYS                                    → MODE        → SCOPE
 ──────────────────────────────────────────────────────────────────────────────
-"Review full code / review toàn bộ"          → FULL        → Read ALL src/ files → 12-category checklist
-"Review thay đổi / review changes"           → CHANGES     → git diff (unstaged + staged) → review only changed code
-"Review file X / review file này"            → FILE        → Read specific file(s) → 12-category checklist on those files only
-"Review function X / review hàm này"         → FUNCTION    → Find function → trace callers/callees → deep review that function
+"Review full code"                           → FULL        → Read ALL src/ files → 12-category checklist
+"Review changes / review diff"               → CHANGES     → git diff (unstaged + staged) → review only changed code
+"Review file X / review this file"           → FILE        → Read specific file(s) → 12-category checklist on those files only
+"Review function X / review this function"   → FUNCTION    → Find function → trace callers/callees → deep review that function
 "Review PR / review pull request"            → PR          → git diff [base]..HEAD → Step 0 PR-Level + 12-category on diff
-"Review các file đã sửa / modified files"    → MODIFIED    → git status (modified only) → read + review modified files
-"Review commit / review các commit"          → COMMITS     → git log → git show [commit] → review each commit's changes
-"Check PR / check review PR"                 → PR-CHECK    → Step 0 ONLY (size, scope, tests, commits) → quick pass/fail
+"Review modified files"                      → MODIFIED    → git status (modified only) → read + review modified files
+"Review commits"                             → COMMITS     → git log → git show [commit] → review each commit's changes
+"Check PR"                                   → PR-CHECK    → Step 0 ONLY (size, scope, tests, commits) → quick pass/fail
 
 ═══ MODE DETAILS ═══
 
@@ -124,7 +124,7 @@ MODE: PR-CHECK (quick — no code review)
 ⛔ DEFAULT: If user says just "review" without specifying:
   → Check git status first
   → If changes exist → MODE: CHANGES (review what changed)
-  → If no changes → ASK: "Review full codebase hoặc file cụ thể nào?"
+  → If no changes → ASK: "Review full codebase or a specific file?"
 ```
 
 ---

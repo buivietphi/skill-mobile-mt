@@ -1,6 +1,6 @@
 {
   "name": "@buivietphi/skill-mobile-mt",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Master Senior Mobile Engineer skill for AI agents. Pre-built patterns from 30+ production repos. React Native, Flutter, iOS, Android. Supports Claude, Cline, Cursor, Windsurf, Copilot, Codex, Gemini, Kimi, Kilo Code, Kiro, Antigravity.",
   "author": "buivietphi",
   "license": "MIT",
