@@ -72,73 +72,6 @@ Reads your current project first, then follows **your** conventions:
 - Clones the most similar existing feature when scaffolding new ones
 - Never suggests migrations or imposes different architecture
 
-## Humanizer — Mobile Copy
-
-Installed automatically alongside the main skill. Removes AI writing patterns from mobile app text.
-
-```
-@humanizer-mobile
-```
-
-Use for: app store descriptions, release notes, error messages, onboarding, push notifications, permission prompts, paywall copy.
-
-**App Store Description**
-```
-❌ "TaskFlow is a powerful, comprehensive task management application that
-seamlessly integrates with your existing workflow."
-
-✅ "TaskFlow keeps your team's work in one place. Add tasks, assign them,
-set deadlines — everything syncs in real time. Works with Slack and Notion."
-```
-
-**Release Notes**
-```
-❌ "Version 2.1.0 introduces significant enhancements to the overall user
-experience including robust improvements to performance and reliability."
-
-✅ "2.1.0
-- Faster load times on older Android devices (was 4s, now 1.2s)
-- Fixed crash when opening notifications while offline
-- Dark mode now remembers your setting between sessions"
-```
-
-**Error Messages**
-```
-❌ "We apologize for the inconvenience. An unexpected error has occurred."
-
-✅ "Couldn't save — no internet connection.
-   [Try again] [Save for later]"
-```
-
-**Push Notifications**
-```
-❌ "You have received a new message from a team member."
-✅ "Alex commented on "Landing page redesign""
-```
-
-**Paywall**
-```
-❌ "Unlock the full potential of our comprehensive premium features."
-
-✅ "Go Pro
-   • Unlimited projects (free plan: 3)
-   • Team sharing
-   [Start 7-day free trial]"
-```
-
-Covers 24 AI patterns across: content inflation, chatbot artifacts, style issues, mobile-specific copy (App Store limits, permission prompts, rating requests, subscription CTAs).
-
-### Works with all agents
-
-| Agent | Invocation |
-|-------|-----------|
-| Claude Code | `@humanizer-mobile` |
-| Gemini CLI | `@humanizer-mobile` |
-| Codex / Kimi / Antigravity | `@humanizer-mobile` |
-| Cline / Roo Code / Cursor / Windsurf / Copilot | Paste the text and say "humanize this app copy" |
-
----
-
 ## Quick Start Examples
 
 ### Step 1: Install the skill
@@ -567,6 +500,17 @@ your-project/
 | **Kilo Code** | Reads `.kilocode/rules/` from project root | `npx skill-mobile-mt --init kilocode` |
 | **Kiro** | Reads `.kiro/steering/` from project root | `npx skill-mobile-mt --init kiro` |
 | **Antigravity** | Reads from `~/.agents/skills/` | `npx skill-mobile-mt --antigravity` |
+
+## Companion Skill
+
+**humanizer-mobile** is auto-installed alongside the main skill. It humanizes AI-generated mobile copy — app store descriptions, release notes, error messages, push notifications, paywall text.
+
+```
+@humanizer-mobile
+> "Humanize this app store description"
+```
+
+---
 
 ## License
 
