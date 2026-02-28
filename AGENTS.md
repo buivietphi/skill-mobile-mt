@@ -184,7 +184,7 @@ The agent reads the task, then decides which extra file to load:
 ```yaml
 skill:
   name: skill-mobile-mt
-  version: "2.2.0"
+  version: "2.2.1"
   author: buivietphi
   category: engineering
   tags:
@@ -525,7 +525,7 @@ npx @buivietphi/skill-mobile-mt --init all        # → all files
 {
   "id": "skill-mobile-mt",
   "name": "skill-mobile-mt",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "author": "buivietphi",
   "category": "engineering",
   "description": "Master Senior Mobile Engineer. Patterns from 30+ production repos (200k+ GitHub stars) + research from top 53k+ star skill repos. Cardinal rules, self-critique loops, leverage pyramid, verification-first, decision matrix, codebase scan strategy, grounded code review (anti-false-positive), git-aware debugging, task extraction protocol, multi-fix execution, UI fix protocol, completion re-check. React Native, Flutter, iOS, Android.",
